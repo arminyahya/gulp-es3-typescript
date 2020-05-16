@@ -1,3 +1,9 @@
 # gulp-es3-typescript
 
-clone and run npm i
+npm i
+
+then
+
+npm run start
+
+then open index.html from file
