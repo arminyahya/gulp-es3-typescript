@@ -21,7 +21,6 @@ const Table = ({dataSource, columns}: Props) => {
 	const tableBody = document.createElement('tbody');
 	/* add table headers */
 	for(let column of columns) {
-		console.log(column);
 		let th  = document.createElement('th');
 		th.innerHTML = column.title;
 		tableheadrow.appendChild(th);
@@ -35,7 +34,6 @@ const Table = ({dataSource, columns}: Props) => {
 			const renderer = columns.find((column) => column.dataIndex === d).renderer;
 			if(renderer) {
 				const rendererOutput = renderer(data);
-				console.log(rendererOutput.scopeName);
 				if(isObjectDomElement(rendererOutput)) {
 					td.appendChild(rendererOutput);
 				} else {
