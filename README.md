@@ -2,8 +2,10 @@
 
 npm i
 
-then
+then:
 
 npm run start
 
-then open index.html from file
+then:
+
+open index.html from file
