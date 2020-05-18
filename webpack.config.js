@@ -1,10 +1,10 @@
-const path = require('path');
-const ES3Plugin = require("webpack-es3-plugin");
+var path = require('path');
+var ES3Plugin = require("webpack-es3-plugin");
 
 module.exports = {
   entry: './src/main.ts',
   devtool: 'source-map',
-  mode: 'development',
+  mode: 'production',
   module: {
     rules: [
       {

@@ -32,12 +32,14 @@ export const elementIdGenerator = {
 	}
 }
 
+
 interface createElementArgs<T> {
 	tagName: string;
-	props?: T;
+	// override default style type
+	props?:  Partial<Omit<T, 'style'> & { style?: Partial<CSSStyleDeclaration> }>
 }
 
-export const createElement = function <T = React.AllHTMLAttributes<any>>({ tagName, props }: createElementArgs<T>) {
+export const createElement = function <T = any>({ tagName, props }: createElementArgs<T>) {
 	const element = document.createElement(tagName) as HTMLElement;
 	for (let prop in props) {
 		if (prop === 'style') {
@@ -50,3 +52,4 @@ export const createElement = function <T = React.AllHTMLAttributes<any>>({ tagNa
 	}
 	return element;
 }
+
