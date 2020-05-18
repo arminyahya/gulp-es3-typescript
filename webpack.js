@@ -3,7 +3,7 @@ const ES3Plugin = require("webpack-es3-plugin");
 
 module.exports = {
   entry: './src/main.ts',
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   mode: 'development',
   module: {
     rules: [
