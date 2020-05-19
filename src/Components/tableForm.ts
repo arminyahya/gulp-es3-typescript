@@ -1,9 +1,7 @@
 import { isObjectDomElement } from '../utils';
 
 type TableColumn = {
-	title: string,
 	dataIndex: string,
-	key: any,
 	renderer?: (data: any) => any;
 }
 
@@ -25,7 +23,7 @@ const TableForm = ({dataSource, columns}: Props) => {
 			let td = document.createElement('td');
 			const renderer = columns.find((column) => column.dataIndex === d).renderer;
 			if(renderer) {
-				const rendererOutput = renderer(data);
+				const rendererOutput = renderer(data[d]);
 				if(isObjectDomElement(rendererOutput)) {
 					td.appendChild(rendererOutput);
 				} else {

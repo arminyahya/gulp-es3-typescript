@@ -20,3 +20,12 @@ table {
 	width: 150px;
 	background-color: #ccc;
 }
+
+.with-label__label {
+	color: #6e501f;
+	display: inline-block;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 0px 5px;
+
+}

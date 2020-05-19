@@ -1,3 +1,4 @@
+import { createElement } from "../utils";
 
 type ValueLabel = {
 	value: any;
@@ -8,15 +9,14 @@ type ValueLabel = {
 interface Props {
 	options: ValueLabel[];
 	value?: ValueLabel;
+	name?: string;
 }
 
-function Select({options, value}: Props) {
-	var select = document.createElement('select');
-	if(value) {
-		select.value = value.value;
-	}
+function Select({options, value, name}: Props) {
+	var select = createElement({tagName:'select', props: {value: value, name: name}});
+
 	options.map(function(option, i){
-		var domOption = document.createElement('option');
+		var domOption = createElement({tagName: 'option'});
 		domOption.setAttribute('value', option.value);
 		domOption.innerHTML = option.label;
 		select.appendChild(domOption);

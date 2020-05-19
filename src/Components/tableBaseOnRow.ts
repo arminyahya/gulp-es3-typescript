@@ -1,0 +1,40 @@
+import { isObjectDomElement, createElement } from '../utils';
+
+type TableRow = {
+	renderer: HTMLElement[];
+}
+
+interface Props {
+	rows: TableRow[];
+}
+
+const TableBaseOnRow = ({ rows}: Props) => {
+	/* table core elements */
+	const tableDom = document.createElement('table');
+	const tableBody = document.createElement('tbody');
+	/* add table data */
+	for (let row of rows) {
+		let tr = createElement({tagName: 'tr', props: {}});
+		for (let td of row.renderer) {
+			tr.appendChild(td);
+		}
+		tableBody.appendChild(tr);
+	}
+
+	tableDom.appendChild(tableBody);
+	return tableDom;
+}
+
+interface data  {
+	input: HTMLElement,
+	cellProps?: Partial<Omit<HTMLTableDataCellElement, 'style'> & { style?: Partial<CSSStyleDeclaration> }>
+}
+export const mapIntoTD  = (data: data[])  => {
+	return data.map((item) => {
+		let td = createElement<HTMLTableDataCellElement>({tagName: 'td', props: {...item.cellProps}});
+		td.appendChild(item.input);
+		return td;
+	})
+}
+
+export default TableBaseOnRow;

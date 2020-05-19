@@ -7,6 +7,7 @@
     "target": "es3",
 		"allowJs": true,
     "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "lib": [
       "es2016",
       "DOM"
