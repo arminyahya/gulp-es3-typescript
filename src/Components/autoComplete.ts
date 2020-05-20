@@ -1,6 +1,6 @@
 import * as $ from 'jquery';
 import { Dropdown } from ".";
-import { getElementWithClassNames, getElementWithStyle, elementIdGenerator, createElement } from "../utils";
+import { getElementWithClassNames, getElementWithStyle, elementIdGenerator, createElement, withErrorHandling } from "../utils";
 
 export type ValueLabel = {
 	value: any;
@@ -83,4 +83,4 @@ function AutoComplete({options, value, onInputChange}: Props) {
 	return autoCompleteWrap;
 }
 
-export default AutoComplete;
+export default withErrorHandling(AutoComplete, 'AutoComplete');

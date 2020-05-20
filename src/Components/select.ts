@@ -1,4 +1,4 @@
-import { createElement } from "../utils";
+import { createElement, withErrorHandling } from "../utils";
 
 type ValueLabel = {
 	value: any;
@@ -24,4 +24,4 @@ function Select({options, value, name}: Props) {
 	return select;
 }
 
-export default Select;
+export default withErrorHandling(Select, 'Select');

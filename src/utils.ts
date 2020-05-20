@@ -52,3 +52,10 @@ export const createElement = function <T = any>({ tagName, props }: createElemen
 	return element;
 }
 
+export const withErrorHandling = (component: any, componentName: string) => (...args) => {
+	try {
+		return component(...args)
+	} catch (e) {
+		console.error('error happend in' + componentName, e)
+	}
+}

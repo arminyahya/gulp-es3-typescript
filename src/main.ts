@@ -1,2 +1,3 @@
-import { generateTableForm } from './examples/formExample';
+
+import generateTableForm  from './examples/formExample';
 generateTableForm();

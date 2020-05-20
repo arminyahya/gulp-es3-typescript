@@ -1,4 +1,4 @@
-import { createElement, renderIntoRoot } from "../../utils";
+import { createElement, renderIntoRoot, withErrorHandling } from "../../utils";
 import * as $ from 'jquery';
 import { Select } from "../../Components";
 import TableBasedRow, { mapIntoTD } from "../../Components/tableBaseOnRow";
@@ -6,7 +6,7 @@ import { formNumberInput, firstNameInput, lastNameInput, fromDateInput, toDateIn
 import { fetchTableLoginFormDefaultValues } from "./mockApi";
 
 
-export const generateTableForm = async function () {
+ const generateTableForm = async function () {
 	const {
 		formNumber, firstName, lastName, fromDate, toDate, status, employmentType, gender,
 		maritalStatus, country, fromBirthDate, toBirthDate, city, languageLevel, languages
@@ -118,3 +118,5 @@ export const generateTableForm = async function () {
 	form.appendChild(button);
 	renderIntoRoot(form);
 }
+
+export default generateTableForm;

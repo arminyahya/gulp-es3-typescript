@@ -1,4 +1,4 @@
-import { getElementWithClassNames, createElement } from "../utils";
+import { getElementWithClassNames, createElement, withErrorHandling } from "../utils";
 
 interface Props {
 	children?: HTMLElement;
@@ -13,4 +13,4 @@ function Dropdown({ children }: Props) {
 	return dropdown;
 }
 
-export default Dropdown;
+export default withErrorHandling(Dropdown, 'DropDown');

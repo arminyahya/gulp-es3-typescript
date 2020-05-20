@@ -5,7 +5,7 @@
   "scripts": {
     "start": "gulp --gulpfile tasks",
     "build:dev": "./node_modules/.bin/webpack --config ./webpack.config.js",
-    "build:production": "./node_modules/.bin/webpack -p --config ./webpack.config.js"
+    "build:production": "./node_modules/.bin/webpack --config ./webpack.config.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,7 @@
     "@babel/preset-env": "^7.9.6",
     "babel-core": "^7.0.0-bridge.0",
     "babel-loader": "^7.1.5",
+    "babel-minify-webpack-plugin": "^0.3.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-es3-member-expression-literals": "^6.22.0",
     "babel-plugin-transform-es3-property-literals": "^6.22.0",

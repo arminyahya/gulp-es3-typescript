@@ -1,10 +1,11 @@
 var path = require('path');
 var ES3Plugin = require("webpack-es3-plugin");
+const MinifyPlugin = require("babel-minify-webpack-plugin");
 
 module.exports = {
-  entry: './src/main.ts',
+  entry: ['./src/main.ts'],
   devtool: 'source-map',
-  mode: 'production',
+  mode: 'development',
   module: {
     rules: [
       {
@@ -20,14 +21,15 @@ module.exports = {
           options: {
             presets: ["@babel/preset-env", { "loose": true, "modules": "commonjs" }],
             plugins: [
-              "babel-plugin-transform-class-properties"]
+              "babel-plugin-transform-class-properties"
+            ]
           }
         }
 
       }
     ]
   },
-  plugins: [new ES3Plugin()],
+  plugins: [new ES3Plugin() ,new MinifyPlugin()],
   resolve: {
     modules: ['node_modules', 'src'],
     extensions: ['.tsx', '.ts', '.js'],

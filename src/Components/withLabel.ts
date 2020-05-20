@@ -1,6 +1,6 @@
-import { createElement } from "../utils";
+import { createElement, withErrorHandling } from "../utils";
 
-function withLabel(input: HTMLElement, title: string) {
+const  withLabel = (input: HTMLElement, title: string) => {
 	const wrapper = createElement({ tagName: 'div' });
 	const label = createElement<HTMLLabelElement>({ tagName: 'label', props: { className: 'with-label__label' } });
 	label.innerHTML = title;
@@ -9,4 +9,4 @@ function withLabel(input: HTMLElement, title: string) {
 	return wrapper;
 }
 
-export default withLabel;
+export default withErrorHandling(withLabel, 'withLabel');

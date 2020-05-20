@@ -1,4 +1,4 @@
-import { isObjectDomElement, createElement } from '../utils';
+import { isObjectDomElement, createElement, withErrorHandling } from '../utils';
 
 type TableColumn = {
 	title: string,
@@ -56,4 +56,4 @@ const Table = ({ dataSource, columns }: Props) => {
 	return tableDom;
 }
 
-export default Table;
+export default withErrorHandling(Table, 'Table');

@@ -1,5 +1,4 @@
-import { isObjectDomElement, createElement } from '../utils';
-
+import { isObjectDomElement, createElement, withErrorHandling } from '../utils';
 type TableRow = {
 	renderer: HTMLElement[];
 }
@@ -9,20 +8,19 @@ interface Props {
 }
 
 const TableBasedRow = ({ rows }: Props) => {
-	/* table core elements */
-	const tableDom = createElement<HTMLTableElement>({ tagName: 'table', props: { className: 'table-base-row' } });
-	const tableBody = createElement({tagName: 'tbody'});
-	/* add table data */
-	for (let row of rows) {
-		let tr = createElement({ tagName: 'tr', props: {} });
-		for (let td of row.renderer) {
-			tr.appendChild(td);
+		/* table core elements */
+		const tableDom = createElement<HTMLTableElement>({ tagName: 'table', props: { className: 'table-base-row' } });
+		const tableBody = createElement({ tagName: 'tbody' });
+		/* add table data */
+		for (let row of rows) {
+			let tr = createElement({ tagName: 'tr', props: {} });
+			for (let td of row.renderer) {
+				tr.appendChild(td);
+			}
+			tableBody.appendChild(tr);
 		}
-		tableBody.appendChild(tr);
-	}
-
-	tableDom.appendChild(tableBody);
-	return tableDom;
+		tableDom.appendChild(tableBody);
+		return tableDom;
 }
 
 interface data {
@@ -37,4 +35,4 @@ export const mapIntoTD = (data: data[]) => {
 	})
 }
 
-export default TableBasedRow;
+export default withErrorHandling(TableBasedRow, 'TableBasedRow');

@@ -1,3 +1,5 @@
+import { withErrorHandling } from "../utils";
+
 interface Props {
 	htmlsrc: string;
 	height?: number;
@@ -8,4 +10,4 @@ const Modal = ({ htmlsrc, height = 250, width = 850 }: Props) => {
 	const modalOptions = `dialogHeight:${height}px;dialogWidth:${width}px`;
 	window.showModalDialog(htmlsrc, "", modalOptions)
 }
-export default Modal;
+export default withErrorHandling(Modal, 'Modal');
