@@ -1,6 +1,6 @@
 import * as $ from 'jquery';
 import { Dropdown } from ".";
-import { getElementWithClassNames, getElementWithStyle, elementIdGenerator } from "../utils";
+import { getElementWithClassNames, getElementWithStyle, elementIdGenerator, createElement } from "../utils";
 
 export type ValueLabel = {
 	value: any;
@@ -17,9 +17,7 @@ interface Props {
 function AutoComplete({options, value, onInputChange}: Props) {
 	const idGenerator = elementIdGenerator;
 	// Wrapper
-	let autoCompleteWrap = document.createElement('div');
-	autoCompleteWrap = getElementWithClassNames(autoCompleteWrap, ['auto-complete']);
-	autoCompleteWrap.id = idGenerator.gererate();
+	let autoCompleteWrap =  createElement<HTMLDivElement>({tagName: 'div', props: {id: idGenerator.gererate(), className: 'auto-complete'}});
 
 	// Input
 	var inputDom = document.createElement('input');
@@ -39,7 +37,7 @@ function AutoComplete({options, value, onInputChange}: Props) {
 		const newOptions = await onInputChange(text);
 		dropdown.innerHTML = '';
 		newOptions.forEach((option, i) => {
-			const listItem = document.createElement('div');
+			const listItem = createElement({tagName: 'div'});
 			listItem.innerHTML = option.label;
 			listItem.onclick = function() {
 				setInputValue(option.label);
@@ -60,7 +58,7 @@ function AutoComplete({options, value, onInputChange}: Props) {
 
 	// DropDown
 	let dropdown = Dropdown({});
-	dropdown = getElementWithClassNames(dropdown, ['auto-complete__dropdown']);
+	dropdown = getElementWithClassNames(dropdown, ['auto-complete__dropdown']) as HTMLDivElement;
 	dropdown = getElementWithStyle(dropdown, [{key: 'display', value: 'none'}]);
 	dropdown.id = idGenerator.gererate();
 	options.forEach((option) => {

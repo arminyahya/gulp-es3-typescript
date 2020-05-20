@@ -1,8 +1,7 @@
 import { createElement, renderIntoRoot } from "../../utils";
-import TableForm from "../../Components/tableForm";
 import * as $ from 'jquery';
 import { Select } from "../../Components";
-import TableBaseOnRow, { mapIntoTD } from "../../Components/tableBaseOnRow";
+import TableBasedRow, { mapIntoTD } from "../../Components/tableBaseOnRow";
 import { formNumberInput, firstNameInput, lastNameInput, fromDateInput, toDateInput, statusInput, employmentTypeInput, genderInput, maritalStatusInput, countryInput, toBirthDateInput, fromBirthDateInput, cityInput, languageLevelInput, languagesInput } from "./inputs";
 import { fetchTableLoginFormDefaultValues } from "./mockApi";
 
@@ -17,15 +16,19 @@ export const generateTableForm = async function () {
 		tagName: 'form',
 		props: {
 			id: 'table-form',
-			dir: 'rtl'
+			dir: 'ltr'
 		}
 	});
-	form.onsubmit = function (e) { return false };
 
+	form.onsubmit = function (e) { return false };
 	const button = createElement<HTMLInputElement>({
 		tagName: 'input',
 		props: {
 			type: 'submit',
+			value: 'save',
+			style: {
+				margin: '10px'
+			},
 			onclick: function (e) {
 				console.log($('#table-form').serializeArray());
 			}
@@ -105,8 +108,13 @@ export const generateTableForm = async function () {
 			])
 		}
 	];
-	const mainTable = TableBaseOnRow({ rows: mainRows });
-	form.appendChild(mainTable);
+	const mainTable = TableBasedRow({ rows: mainRows });
+	const fieldSet = createElement({tagName: 'fieldset'});
+	const legend = createElement({tagName: 'legend'});
+	legend.innerHTML = 'basic info';
+	fieldSet.appendChild(legend);
+	fieldSet.appendChild(mainTable);
+	form.appendChild(fieldSet);
 	form.appendChild(button);
 	renderIntoRoot(form);
 }

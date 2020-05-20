@@ -1,4 +1,4 @@
-import { isObjectDomElement } from '../utils';
+import { isObjectDomElement, createElement } from '../utils';
 
 type TableColumn = {
 	title: string,
@@ -12,29 +12,29 @@ interface Props {
 	columns: TableColumn[];
 }
 
-const Table = ({dataSource, columns}: Props) => {
+const Table = ({ dataSource, columns }: Props) => {
 	const dataToDisplay = columns.map((column) => column.dataIndex);
 	/* table core elements */
-	const tableDom = document.createElement('table');
-	const tableHead = document.createElement('thead');
-	const tableheadrow = document.createElement('tr');
-	const tableBody = document.createElement('tbody');
+	const tableDom = createElement({ tagName: 'table' });
+	const tableHead = createElement({ tagName: 'thead' });
+	const tableheadrow = createElement({ tagName: 'tr' });
+	const tableBody = createElement({ tagName: 'tbody' });
 	/* add table headers */
-	for(let column of columns) {
-		let th  = document.createElement('th');
+	for (let column of columns) {
+		let th = createElement({ tagName: 'th' });
 		th.innerHTML = column.title;
 		tableheadrow.appendChild(th);
 	}
 	/* add table data */
-	for(let data of dataSource) {
-		let tr  = document.createElement('tr');
+	for (let data of dataSource) {
+		let tr = createElement({ tagName: 'tr' });
 		const tds = [];
-		for(let d of dataToDisplay ) {
-			let td = document.createElement('td');
+		for (let d of dataToDisplay) {
+			let td = createElement({ tagName: 'td'});
 			const renderer = columns.find((column) => column.dataIndex === d).renderer;
-			if(renderer) {
+			if (renderer) {
 				const rendererOutput = renderer(data);
-				if(isObjectDomElement(rendererOutput)) {
+				if (isObjectDomElement(rendererOutput)) {
 					td.appendChild(rendererOutput);
 				} else {
 					td.innerHTML = rendererOutput;
@@ -44,7 +44,7 @@ const Table = ({dataSource, columns}: Props) => {
 			}
 			tds.push(td);
 		}
-		for(let td of tds) {
+		for (let td of tds) {
 			tr.appendChild(td);
 		}
 		tableBody.appendChild(tr);

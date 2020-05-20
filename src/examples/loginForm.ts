@@ -1,8 +1,4 @@
 import { createElement, renderIntoRoot } from "../utils";
-import TableForm from "../Components/tableForm";
-import * as $ from 'jquery';
-import { Select } from "../Components";
-import TableBaseOnRow, { mapIntoTD } from "../Components/tableBaseOnRow";
 
 const getLoginFormDefaultValues = function () {
 	const data = { username: 'armin', password: '12345' };
@@ -12,7 +8,6 @@ const getLoginFormDefaultValues = function () {
 		}, 1000)
 	})
 }
-
 
 export const generateLoginForm = async function () {
 	const { username, password } = await getLoginFormDefaultValues() as any;

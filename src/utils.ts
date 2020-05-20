@@ -12,12 +12,12 @@ export const getElementWithStyle = (element, styles: { key: string, value: strin
 	return clonedObject;
 }
 
-export const renderIntoRoot = (element) => {
+export const renderIntoRoot = (element: HTMLElement) => {
 	container.appendChild(element);
 }
 
-export const getElementWithClassNames = (element, classNames: string[]) => {
-	const clonedObject = element.cloneNode();
+export const getElementWithClassNames = (element: HTMLElement, classNames: string[]) => {
+	const clonedObject = element.cloneNode(true) as HTMLElement;
 	classNames.forEach(className => {
 		clonedObject.className += ` ${className}`
 	});
@@ -31,7 +31,6 @@ export const elementIdGenerator = {
 		return this.id.toString();
 	}
 }
-
 
 interface createElementArgs<T> {
 	tagName: string;
