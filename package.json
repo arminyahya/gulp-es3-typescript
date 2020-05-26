@@ -35,5 +35,7 @@
     "webpack-cli": "^3.3.11",
     "webpack-es3-plugin": "^1.5.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^2.4.3"
+  }
 }

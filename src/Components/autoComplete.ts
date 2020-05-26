@@ -15,7 +15,7 @@ interface Props {
 }
 
 function AutoComplete({options, value, onInputChange}: Props) {
-	const idGenerator = elementIdGenerator;
+	const idGenerator = elementIdGenerator.gererate();
 	// Wrapper
 	let autoCompleteWrap =  createElement<HTMLDivElement>({tagName: 'div', props: {id: idGenerator.gererate(), className: 'auto-complete'}});
 

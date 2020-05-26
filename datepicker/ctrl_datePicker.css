@@ -1,0 +1,35 @@
+.cpMainTable, .cpParentSpan
+{
+	text-align:center;
+	cursor:default;
+}
+
+.cpMainTable
+{
+	table-layout:fixed;
+	border-collapse:collapse;
+	border:solid 1px;
+	text-align:center;
+	width:10%;
+}
+
+.cpDateCol
+{
+	width:1.8em;
+	height:1em;
+}
+
+.cpDayLettersCell{border-bottom:solid 1px;}
+.cpMonthDisplayName{cursor:default;}
+.cpFirstCol,{width:1.6em;}
+.cpLastCol{width:8px;}
+.cpLeftNavButton,.cpRightNavButton{cursor:hand;}
+.cpRightNavButton{text-align:right;padding-right:6px;}
+.cpTodaysDateCell{border:solid 1px;cursor:hand;}
+.cpActiveDateCell,.cpInactiveDateCell{xborder:solid 1px;}
+.cpActiveDateCell{cursor:hand;}
+.cpInactiveDateCell{cursor:hand;}
+.cpSelectedDateCell{text-align:center;}
+.cpWeekNumberCell{font-size:80%;border-right:solid 1px;cursor:hand;}
+.cpKeyNavCell0{margin:1px;text-align:center;}
+.cpKeyNavCell1{border:dotted 1;cursor:hand;text-align:center;}

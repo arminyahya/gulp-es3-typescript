@@ -2,7 +2,7 @@ const defaults = {
 	"formNumber":"0",
 	"firstName":"armin",
 	"lastName":"yahya",
-	"fromDate":"2020/02/02",
+	"fromDate":"2020-02-03 00:00",
 	"toDate":"2020/02/02",
 	"status":{
 	"value":"1",
@@ -29,9 +29,10 @@ const defaults = {
 };
 
 export const fetchTableLoginFormDefaultValues = function () {
-	return new Promise((resolve, reject) => {
-		setTimeout(() => {
-			resolve(defaults);
-		}, 0)
-	})
+	return defaults 
+	// return new Promise((resolve, reject) => {
+	// 	setTimeout(() => {
+	// 		resolve(defaults);
+	// 	}, 0)
+	// })
 }

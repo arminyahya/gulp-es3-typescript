@@ -1,4 +1,4 @@
-import { createElement, renderIntoRoot, withErrorHandling } from "../../utils";
+import { createElement, renderIntoRoot, withErrorHandling, formToJSON } from "../../utils";
 import * as $ from 'jquery';
 import { Select } from "../../Components";
 import TableBasedRow, { mapIntoTD } from "../../Components/tableBaseOnRow";
@@ -10,7 +10,7 @@ import { fetchTableLoginFormDefaultValues } from "./mockApi";
 	const {
 		formNumber, firstName, lastName, fromDate, toDate, status, employmentType, gender,
 		maritalStatus, country, fromBirthDate, toBirthDate, city, languageLevel, languages
-	} = await fetchTableLoginFormDefaultValues() as any;
+	} = fetchTableLoginFormDefaultValues() as any;
 
 	const form = createElement<HTMLFormElement>({
 		tagName: 'form',
@@ -30,7 +30,7 @@ import { fetchTableLoginFormDefaultValues } from "./mockApi";
 				margin: '10px'
 			},
 			onclick: function (e) {
-				console.log($('#table-form').serializeArray());
+				console.log(formToJSON('#table-form'));
 			}
 		}
 	});

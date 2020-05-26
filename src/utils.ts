@@ -1,3 +1,5 @@
+import * as $ from 'jquery';
+
 export const container = document.getElementById('root');
 
 export const isObjectDomElement = (object) => {
@@ -23,23 +25,32 @@ export const getElementWithClassNames = (element: HTMLElement, classNames: strin
 	});
 	return clonedObject;
 }
-
+/**
+ * no need to assing me to new variable, use me directly
+ */
 export const elementIdGenerator = {
 	id: 0,
 	gererate: function () {
-		this.id++;
-		return this.id.toString();
+		Math.random();
+		if ($(`#${this.id}`).length === 0) {
+			return this.id.toString();
+		} else {
+			this.gererate();
+		}
 	}
 }
 
 interface createElementArgs<T> {
 	tagName: string;
 	// override default style type
-	props?:  Partial<Omit<T, 'style'> & { style?: Partial<CSSStyleDeclaration> }>
+	props?: Partial<Omit<T, 'style'> & { style?: Partial<CSSStyleDeclaration> }>;
+	onMount?: () => void;
 }
 
-export const createElement = function <T = any>({ tagName, props }: createElementArgs<T>) {
+export const createElement = function <T = any>({ tagName, props, onMount }: createElementArgs<T>) {
 	const element = document.createElement(tagName) as HTMLElement;
+	const idGenerator = elementIdGenerator;
+
 	for (let prop in props) {
 		if (prop === 'style') {
 			for (let style in props[prop]) {
@@ -49,13 +60,41 @@ export const createElement = function <T = any>({ tagName, props }: createElemen
 			element[prop as any] = props[prop]
 		}
 	}
+
+	if (onMount) {
+		if (!props || !props['id']) {
+			element.id = idGenerator.gererate();
+		}
+		$(element.id).ready(() => {
+			console.log(element.id);
+			onMount();
+		});
+	}
 	return element;
 }
 
-export const withErrorHandling = (component: any, componentName: string) => (...args) => {
+export const withErrorHandling = <T extends (...args: any[]) => any>(component: any, componentName: string) => (...args: Parameters<T>) => {
 	try {
 		return component(...args)
 	} catch (e) {
 		console.error('error happend in' + componentName, e)
 	}
+}
+
+
+export function formToJSON( selector )
+{
+     var form = {};
+     $(selector).find(':input[name]:enabled').each( function() {
+         var self = $(this);
+         var name = self.attr('name');
+         if (form[name]) {
+            form[name] = form[name] + ',' + self.val();
+         }
+         else {
+            form[name] = self.val();
+         }
+     });
+
+     return form;
 }

@@ -1,0 +1,838 @@
+﻿<html>
+<PUBLIC:COMPONENT tagName="datePicker">
+	<PUBLIC:PROPERTY	name="date" put="put_Date" get="get_Date" />
+
+	<PUBLIC:PROPERTY	name="time" get="get_Time" />
+	<PUBLIC:PROPERTY	name="hours" get="get_Hours" />
+	<PUBLIC:PROPERTY	name="minutes" get="get_Minutes" />
+
+	<PUBLIC:PROPERTY	name="month" get="get_Month" />
+	<PUBLIC:PROPERTY	name="day" get="get_Day" />
+	<PUBLIC:PROPERTY	name="year" get="get_Year" />
+	<PUBLIC:PROPERTY	name="dateString" get="get_DateString" />
+	
+	<PUBLIC:PROPERTY	name="dateForServer" put="put_DateForServer" get="get_DateForServer" />
+
+	<PUBLIC:PROPERTY	name="todayIsDefault" internalName="m_todayIsDefault" />
+	<PUBLIC:PROPERTY	name="displayMode" internalName="m_displayMode" />
+	<PUBLIC:PROPERTY	name="vPosition" put="put_vPosition" get="get_vPosition" />
+	<PUBLIC:PROPERTY	name="position" internalName="m_position" />
+	<PUBLIC:PROPERTY	name="languageCode" internalName="m_languageCode" />
+	<PUBLIC:PROPERTY	name="valueField" internalName="m_valueField" />
+	<PUBLIC:PROPERTY	name="timeField" internalName="m_timeField" />
+	<PUBLIC:PROPERTY	name="showTime" internalName="m_showTime" />
+	<PUBLIC:PROPERTY	name="forceShowTime" internalName="m_forceShowTime" />
+	<PUBLIC:PROPERTY	name="direction" internalName="m_direction" />
+	<PUBLIC:PROPERTY	name="enabled" put="put_enabled" get="get_enabled" />
+	<PUBLIC:PROPERTY	name="disabled" put="put_disabled" get="get_disabled" />
+	<PUBLIC:PROPERTY	name="tabStopIndex" put="put_tabIndex" />
+	
+	<PUBLIC:METHOD	name="applyTime" internalName="f_applyTime" />
+	<PUBLIC:METHOD	name="clear" internalName="f_clear" />
+	<PUBLIC:METHOD	name="setBackgroundColor" internalName="f_setBackgroundColor" />
+
+	<PUBLIC:EVENT     id="event_onDateChange" name="onDateChange" />	
+
+	<PUBLIC:ATTACH		event="ondocumentready" handler="onDocumentReady" />
+</PUBLIC:COMPONENT>
+
+<XML:namespace prefix="WM"/>
+<?IMPORT namespace="WM" implementation="./ctrl_datepicker.htc">
+<script>
+var m_todayIsDefault;
+var m_displayMode = "long";
+var m_vPosition = "bottom";
+var m_position;
+var m_valueField;
+var m_timeField;
+var m_languageCode = g_LanguageCode;
+var m_direction = g_Direction;
+var m_persianKeyboardBehavior = g_PersianKeyboardBehavior;
+var m_showTime;
+var m_enabled = true;
+var m_this;
+var m_forceShowTime = false;
+
+function initPicker() {
+	try { //ADDED BY AIDIN	
+		var ifr = eval(m_this.id + "_ifr");
+		if (ifr.document.readyState == "complete") {
+			m_this.dPicker = ifr.document.all.picker;
+			ifr.document["owner"] = m_this;
+			m_this.dPicker.imageNextArrow = "./images/form-next.gif";
+			m_this.dPicker.imagePrevArrow = "./images/form-prev.gif";
+
+			if (m_this.m_languageCode == "fa") {
+				if (m_this.m_persianKeyboardBehavior == "arabic") {
+					m_this.dPicker.dayLetters = "ي;د;س;چ;پ;ج;ش";
+					m_this.dPicker.longMonths = "فروردين;ارديبهشت;خرداد;تير;مرداد;شهريور;مهر;آبان;آذر;دي;بهمن;اسفند";
+					m_this.dPicker.shortMonths = "فروردين;ارديبهشت;خرداد;تير;مرداد;شهريور;مهر;آبان;آذر;دي;بهمن;اسفند";
+				} else {
+					m_this.dPicker.dayLetters = "ی;د;س;چ;پ;ج;ش";
+					m_this.dPicker.longMonths = "فروردین;اردیبهشت;خرداد;تیر;مرداد;شهریور;مهر;آبان;آذر;دی;بهمن;اسفند";
+					m_this.dPicker.shortMonths = "فروردین;اردیبهشت;خرداد;تیر;مرداد;شهریور;مهر;آبان;آذر;دی;بهمن;اسفند";
+				}
+			}
+
+			m_this.dPicker.languageCode = m_this.m_languageCode;
+			m_this.dPicker.direction = m_this.m_direction;
+			m_this.dPicker.inputElement = m_this.txtDateBox;
+
+			m_this.dPicker.initBehavior();
+
+			initDate();
+		}
+	} catch (e) { }
+}
+
+function get_DateForServer() {
+	return window.document.all(m_valueField).value;
+}
+
+function put_tabIndex(tabIndex) {
+	txtDate.tabIndex = tabIndex;
+	txtTemp.tabIndex = tabIndex;
+}
+
+function onDocumentReady() {
+	if (!this.id) {
+		this.id = "ccDatePicker" + -1 * getTempId();
+	}
+
+	cmdDown.src = "./datepicker/images/down7x7.gif";
+
+	txtDate.calendar = (m_languageCode == "fa") ? "Persian" : "Gregorian";
+	txtDate.todayIsDefault = this.m_todayIsDefault;
+	txtDate.displayMode = this.m_displayMode;
+
+	cmdPopup.vPosition = this.m_vPosition;
+	cmdPopup.position = this.m_position;
+	cmdPopup.disabled = !this.m_enabled;
+	txtDate.disabled = !this.m_enabled;
+
+	this.popupButton = cmdPopup;
+	this.txtDateBox = txtDate;
+
+	var pickerDateDiv = document.createElement('div');
+	pickerDateDiv.id = "divPicker";
+	pickerDateDiv.style.position = "absolute";
+	pickerDateDiv.style.display = "none";
+	pickerDateDiv.style.zIndex = 200;
+
+	this.ownerDocument.getElementById("Container").appendChild(pickerDateDiv);
+	this.pickerDiv = pickerDateDiv; //divPicker;
+
+	var ifr = document.createElement('iframe');
+	ifr.src = "./datepicker/datePicker.html";
+	ifr.id = this.id + "_ifr";
+	ifr.scrolling = "no";
+	ifr.border = "0";
+	ifr.frameBorder = "0";
+	ifr.marginHeight = "0";
+	ifr.marginWidth = "0";
+	ifr.height = "140px";
+	ifr.width = "139px";
+	ifr.tabIndex = -1;
+	ifr.obj = ifr;
+	ifr.onreadystatechange = initPicker;
+
+	m_this = this;
+
+	this.pickerDiv.appendChild(ifr);
+
+	if (isTrue(m_showTime)) {
+		txtTemp.style.display = "inline";
+		timeField = this.id + "_txtTime";
+		this.txtTimeBox = txtTemp;
+		txtTemp.id = this.id + "_txtTime";
+	} else {
+		if (m_timeField) {
+			this.txtTimeBox = window.document.all(m_timeField);
+		}
+	}
+
+	if (!m_valueField) {
+		if (this.previousSibling.id)
+			m_valueField = this.previousSibling.id;
+		else {
+			this.previousSibling.id = this.previousSibling.name;
+			m_valueField = this.previousSibling.id;
+		}
+	}
+
+	if (m_enabled) {
+		this.popupButton.disabled = false;
+		this.txtDateBox.disabled = false;
+		this.txtDateBox.readOnly = false;
+	} else {
+		this.popupButton.disabled = true;
+		this.txtDateBox.disabled = true;
+		this.txtDateBox.readOnly = true;
+	}
+
+	element.insertAdjacentElement("afterbegin", this.document.body.firstChild);
+}
+
+function parseServerSideDate(serverSideDateString, fromInitializeMode) {
+	var dateString = serverSideDateString;
+	var currentDay = -1;
+	var newDay = -1;
+	var date = null;
+	var standardDateString = null;
+	var am = "ق.ظ";
+	var pm = "ب.ظ";
+	var dayIndex = 1;
+
+	if (dateString.indexOf(am) > 0 || dateString.indexOf(pm) > 0)
+		dayIndex = 2;
+
+	dateString = dateString.replace("ق.ظ", "AM");
+	dateString = dateString.replace("ب.ظ", "PM");
+	standardDateString = dateString.replace(/(\d{4})-(\d{2})-(\d{2})/ig, "$2/$3/$1");
+	date = new Date(Date.parse(dateString.replace(/(\d{4})-(\d{2})-(\d{2})/ig, "$2/$3/$1")));
+	currentDay = standardDateString.split('/')[dayIndex].split(' ')[0]; //day
+	newDay = date.getDate();
+
+	if (currentDay != newDay) {
+		date.setDate(date.getDate() + 1);
+		date.setHours(12);
+	}
+
+	return date;
+}
+
+function initDate() {
+	if (window.document.all(m_valueField).value != "") {
+		var defaultDate = parseServerSideDate(window.document.all(m_valueField).value);
+		var timeValue = "";
+
+		if (m_timeField && window.document.all(m_timeField).value != "") {
+			//defaultDate.setHours(window.document.all(m_timeField).value.split(":")[0]);
+			//defaultDate.setMinutes(window.document.all(m_timeField).value.split(":")[1]);
+			//defaultDate.setSeconds(0);
+			timeValue = window.document.all(m_timeField).value;
+			m_forceShowTime = true;
+		} else if (m_timeField) {
+			timeValue = getHoursPart(defaultDate);
+			m_forceShowTime = true;
+		}
+
+
+		saveDateAndTime(defaultDate, timeValue, m_forceShowTime);
+	} else if (isTrue(this.m_todayIsDefault)) {
+		saveDateAndTime(new Date(), "", false);
+	}
+}
+
+function put_vPosition(pos) {
+	try {
+		this.m_vPosition = pos;
+		this.popupButton.vPosition = pos;
+	} catch (e) { }
+}
+
+function get_vPosition(pos) {
+	return this.m_vPosition;
+}
+
+function put_Date(date) {
+	saveDate(date, m_timeField && window.document.all(m_timeField).value != "");
+}
+
+function put_DateForServer(date) {
+	put_Date(parseServerSideDate(date));
+}
+
+function get_Date() {
+	if (this.txtDateBox.value == "")
+		this.txtDateBox.date = null;
+
+	return this.txtDateBox.date;
+}
+
+function get_Time() {
+	if (!this.txtTimeBox || this.txtTimeBox.value == "")
+		this.txtTimeBox.value = null;
+
+	return this.txtTimeBox.value;
+}
+
+function get_Hours() {
+	if (get_Time() == null)
+		return "00";
+
+	var timeArray = get_Time().split(':');
+	if (timeArray.length != 2)
+		return "00";
+
+	return timeArray[0]; // Hours
+}
+
+function get_Minutes() {
+	if (get_Time() == null)
+		return "00";
+
+	var timeArray = get_Time().split(':');
+	if (timeArray.length != 2)
+		return "00";
+
+	return timeArray[1]; // Minutes
+}
+
+function get_Month() {
+	return getPersianShortDateString(this.txtDateBox.date).split('/')[1]; // Month
+}
+
+function get_Day() {
+	return getPersianShortDateString(this.txtDateBox.date).split('/')[2]; // Day
+}
+
+function get_Year() {
+	return getPersianShortDateString(this.txtDateBox.date).split('/')[0]; // Year
+}
+
+function get_DateString() {
+	if (this.txtDateBox.value == "")
+		this.txtDateBox.date = null;
+
+	return this.txtDateBox.value;
+}
+
+function f_clear() {
+	try {
+		this.txtTimeBox.value = "";
+	} catch (e) { }
+	this.txtDateBox.value = "";
+	this.txtDateBox.date = null;
+	this.txtDateBox.style.borderColor = "";
+}
+
+function f_applyTime() {
+	var time = this.txtTimeBox.value;
+	var invalidTime = false;
+	var hour = "";
+	var mins = "";
+
+	if (time == "") {
+		this.txtTimeBox.style.border = "1px solid silver";
+		handleBlur();
+		return false;
+	}
+
+	if (time.indexOf(":") == -1) {
+		if (time.length == 3 || time.length > 4)
+			invalidTime = true;
+		else if (time.length < 3)
+			hour = time;
+		else {
+			hour = time.substr(0, 2);
+			mins = time.substr(2, 2);
+		}
+	} else {
+		hour = time.substring(0, time.indexOf(":"));
+		mins = time.substring(time.indexOf(":") + 1, time.length);
+	}
+
+	if (!invalidTime) {
+		hour = "00" + hour;
+		mins = "00" + mins;
+
+		hour = hour.substr(hour.length - 2, 2);
+		mins = mins.substr(mins.length - 2, 2);
+
+		if (isNaN(hour) || isNaN(mins) || parseInt(hour) > 24 || parseInt(mins) > 59)
+			invalidTime = true;
+		else
+			this.txtTimeBox.value = hour + ":" + mins;
+	}
+
+	if (invalidTime) {
+		this.txtTimeBox.style.border = "1px solid red";
+		return false;
+	} else {
+		this.txtTimeBox.style.border = "1px solid silver";
+		handleBlur();
+	}
+}
+</script>
+
+<script>
+function hidePopups() {
+	try {
+		var pickers = window.document.all["divPicker"];
+
+		if (typeof (pickers.length) != "undefined") {
+			for (var i = 0; i < pickers.length; i++)
+				pickers[i].style.display = "none";
+		} else {
+			pickers.style.display = "none";
+		}
+	} catch (e) { }
+	try {
+		document.recalc(true);
+	} catch (e) { }
+}
+
+function window.document.onclick() {
+	hidePopups();
+}
+
+function window.onclick() {
+	hidePopups();
+}
+
+function popupCal() {
+	var ePicker = this.pickerDiv;
+	var pickerDisplayStatus = ePicker.style.display;
+	hidePopups();
+
+	if (this.txtDateBox.value != "" && this.txtDateBox.value != null) {
+		this.txtDateBox.style.borderColor = "";
+		var dateValue = this.txtDateBox.value;
+		var calendar = this.txtDateBox.calendar ? this.txtDateBox.calendar : "gregorian";
+
+		var objDate = parseDate(dateValue, calendar);
+		saveDateAndTime(objDate, "", false);
+	}
+
+	var eSrc = this.popupButton;
+
+	var vPosition = "";
+	if (eSrc.vPosition)
+		vPosition = eSrc.vPosition;
+
+	if (this.m_direction == "rtl")
+		ePicker.style.posLeft = event.clientX - event.offsetX - 2 - getOffsetLeft(ePicker.offsetParent);
+	else
+		ePicker.style.posLeft = event.clientX - event.offsetX - this.offsetWidth + 12 - getOffsetLeft(ePicker.offsetParent);
+
+	ePicker.style.display = "";
+
+	if (vPosition.search(/top/i) != -1)
+		ePicker.style.posTop = event.clientY - event.offsetY - ePicker.offsetHeight - 1;
+	else
+		ePicker.style.posTop = event.clientY - event.offsetY + eSrc.offsetHeight - 1 - getOffsetTop(ePicker.offsetParent);
+
+	if (getOffsetTop(ePicker) + ePicker.offsetHeight > window.document.body.offsetHeight)
+		vPosition = "top";
+
+	if (vPosition.search(/top/i) != -1)
+		ePicker.style.posTop = event.clientY - event.offsetY - ePicker.offsetHeight - 1;
+	else
+		ePicker.style.posTop = event.clientY - event.offsetY + eSrc.offsetHeight - 1 - getOffsetTop(ePicker.offsetParent);
+
+	this.dPicker.focus();
+}
+
+function getOffsetTop(obj) {
+	var ret = 0;
+
+	while (obj) {
+		ret += obj.offsetTop;
+		obj = obj.offsetParent;
+	}
+
+	return ret;
+}
+
+function getOffsetLeft(obj) {
+	var ret = 0;
+
+	while (obj) {
+		ret += obj.offsetLeft;
+		obj = obj.offsetParent;
+	}
+
+	return ret;
+}
+
+function getTimeValue(objDate, objTime)
+{
+	var timeValue = "";
+	if (objDate && objDate != null && objTime && objTime != "") {
+		timeValue = objTime;
+
+		var hour =  timeValue.split(":")[0];
+		var minute = timeValue.split(":")[1];
+
+		if((hour == "0" || hour == "00") && this.dPicker.isFaDaylightSaving(objDate, hour))
+			timeValue	= "01:" + minute;
+	}
+
+	return timeValue;
+}
+
+function picker_OnDateChange() {
+	var timeValue = "";
+
+	if (m_timeField && window.document.all(m_timeField).value != "") {
+		timeValue = window.document.all(m_timeField).value;
+		//this.dPicker.setDaylightSaving(this.dPicker.selectedDate);
+	}
+
+	var selectedDate = parseServerSideDate(getDateString(this.dPicker.selectedDate));
+	saveDateAndTime(selectedDate, timeValue, true);
+
+	this.pickerDiv.style.display = "none";
+	try {
+		document.recalc(true);
+	} catch (e) { }
+	try {
+		window.document.recalc(true);
+	} catch (e) { }
+}
+
+function handleKeyDown() {
+	if (event.keyCode == 13 || event.keyCode == 10)
+		handleBlur();
+}
+
+function handleKeyUp() {
+	if (event.keyCode == 40)
+		this.popupButton.click();
+
+	for (var i = 0; i < event.srcElement.value.length; i++) {
+		if (event.srcElement.value.charCodeAt(i) > 1000) {
+			event.srcElement.style.direction = "rtl";
+			event.srcElement.style.textAlign = "right";
+			break;
+		}
+	}
+
+	if (event.keyCode == 191 || event.keyCode == 111 || event.keyCode == 189 || event.keyCode == 109 || event.keyCode == 187 || event.keyCode == 107) {
+		event.srcElement.style.direction = "ltr";
+		event.srcElement.style.textAlign = "left";
+	}
+}
+
+function parseDate(dateValue, calendar) {
+	if (dateValue != "") {
+		var objDate;
+		if (calendar.search(/Persian/ig) != -1)
+			objDate = parsePersianDate(dateValue);
+		else {
+			objDate = new Date(Date.parse(dateValue));
+
+			if(isNaN(objDate)) // new browsers compability check!
+			{
+				/*
+				 * in older ie versions the date string was in 
+				 * older IEs cannot parse YYYY-MM-DD so 
+				 * we reformat it to YYYY/MM/DD style!
+				 * (IE document mode < 9 can't parse YYYY-MM-DD)
+				*/
+
+				objDate = new Date(dateValue.replace("-", "/"));
+			}
+		}
+
+		if (!isNaN(Date.parse(objDate))) {
+			if (m_timeField && window.document.all(m_timeField).value != "") {
+				if (IsDaylightSavingDay(objDate.getFullYear(), objDate.getMonth(), objDate.getDate()) && val(window.document.all(m_timeField).value.split(":")[0]) == 0) //Check DaylightSaving
+					objDate.setHours(1);
+				else	
+					objDate.setHours(window.document.all(m_timeField).value.split(":")[0]);
+
+				objDate.setMinutes(window.document.all(m_timeField).value.split(":")[1]);
+				objDate.setSeconds(0);
+			}
+			return objDate;
+		} else
+			return null;
+	} else
+		return null;
+}
+
+function handleBlur() {
+	this.txtDateBox.style.borderColor = "";
+	var dateValue = this.txtDateBox.value;
+	var calendar = this.txtDateBox.calendar ? this.txtDateBox.calendar : "gregorian";
+	
+	var objDate = parseDate(dateValue, calendar);
+	var objtime = window.document.all(m_timeField).value;
+
+	if (objDate == null) {
+		window.document.all(m_valueField).value = "";
+		window.document.all(m_valueField).date = null;
+
+		if (m_timeField)
+			window.document.all(m_timeField).value = "";
+
+		if (this.txtDateBox.value.length > 0) {
+			this.txtDateBox.style.borderColor = "red";
+			this.txtDateBox.date = null;
+		}
+
+		event_onDateChange.fire();
+	} else {
+		if (window.document.all(m_timeField).value == "") {
+			if(IsDaylightSavingDay(objDate.getFullYear(), objDate.getMonth(), objDate.getDate()))
+				objDate.setHours(1);
+			else
+				objDate.setHours(0);
+
+			objDate.setMinutes(0);
+			objDate.setSeconds(0);
+
+			this.dPicker.setDaylightSaving(objDate);
+		}
+
+		saveDateAndTime(objDate, objtime, true);
+	}
+}
+function saveDateAndTime(objDate, objTime, saveTime) {
+	if(objTime && objTime.split(":").length == 2) {
+		
+		objTime = getTimeValue(objDate, objTime);
+
+		var hour =  objTime.split(":")[0];
+		var minute = objTime.split(":")[1];
+
+		if((hour == "0" || hour == "00") && IsDaylightSavingDay(objDate.getFullYear(), objDate.getMonth(), objDate.getDate()))
+			hour	= "01";
+
+		objDate.setHours(hour);
+		objDate.setMinutes(minute);
+	}
+	else if (m_timeField && saveTime && window.document.all(m_timeField).value == "")
+		objTime = getTimeValue(objDate, getFormatedTime(objTime));
+
+	if (objDate >= new Date("2079/6/6") || objDate <= new Date("1900/1/1")) {
+		this.txtDateBox.value = this.m_direction == "rtl" ? "تاریخ غیر قابل قبول" : "Invalid date";
+		this.txtDateBox.style.borderColor = "red";
+		this.txtDateBox.dir = this.m_direction;
+		this.txtDateBox.style.textAlign = this.m_direction == "ltr" ? "left" : "right";
+		this.txtDateBox.date = null;
+		return false;
+	}
+
+	var dateString = objDate.getFullYear() + "-" + padwithZero(Number(objDate.getMonth() + 1)) + "-" + padwithZero(objDate.getDate());
+
+	if (m_timeField && saveTime && (window.document.all(m_timeField).value != "" || m_forceShowTime))
+		dateString += " " + getFormatedTime(objTime); //getHoursPart(objDate);
+
+	objDate.setSeconds(0);
+	objDate.setMilliseconds(0);
+
+	var d1 = "";
+	var d2 = "";
+	try {
+		d1 = this.txtDateBox.date.toString();
+	} catch (e) { }
+
+	try {
+		d2 = objDate.toString()
+	} catch (e) { }
+	
+	this.dPicker.selectedDate = objDate;
+
+	window.document.all(m_valueField).value = dateString;
+	window.document.all(m_valueField).date = objDate;
+
+	if (m_timeField && saveTime && (window.document.all(m_timeField).value != "" || m_forceShowTime))
+		window.document.all(m_timeField).value = getFormatedTime(objTime); //getHoursPart(objDate);
+
+	this.txtDateBox.date = objDate;
+	this.txtDateBox.time = objTime;
+	this.txtDateBox.style.borderColor = "";
+
+	var displayMode = this.txtDateBox.displayMode ? this.txtDateBox.displayMode : "short";
+	if (this.m_languageCode == "fa") {
+		if (displayMode.search(/long/ig) != -1) {
+			this.txtDateBox.dir = "rtl";
+			this.txtDateBox.style.textAlign = "right";
+			this.txtDateBox.value = getPersianDateString(this.txtDateBox.date);
+		} else {
+			this.txtDateBox.dir = "ltr";
+			this.txtDateBox.style.textAlign = "left";
+			this.txtDateBox.value = getPersianShortDateString(this.txtDateBox.date);
+		}
+	} else {
+		if (displayMode.search(/long/ig) != -1) {
+			this.txtDateBox.dir = "ltr";
+			this.txtDateBox.style.textAlign = "left";
+			this.txtDateBox.value = this.txtDateBox.date.toDateString();
+		} else {
+			this.txtDateBox.dir = "ltr";
+			this.txtDateBox.style.textAlign = "left";
+			this.txtDateBox.value = Number(this.txtDateBox.date.getMonth() + 1) + "/" + this.txtDateBox.date.getDate() + "/" + this.txtDateBox.date.getFullYear();
+		}
+	}
+
+	if (d1 != d2)
+		event_onDateChange.fire();
+
+	f_setBackgroundColor("");
+}
+
+function saveDate(objDate, saveTime) {
+	if (objDate >= new Date("2079/6/6") || objDate <= new Date("1900/1/1")) {
+		this.txtDateBox.value = this.m_direction == "rtl" ? "تاریخ غیر قابل قبول" : "Invalid date";
+		this.txtDateBox.style.borderColor = "red";
+		this.txtDateBox.dir = this.m_direction;
+		this.txtDateBox.style.textAlign = this.m_direction == "ltr" ? "left" : "right";
+		this.txtDateBox.date = null;
+		return false;
+	}
+
+	var dateString = objDate.getFullYear() + "-" + padwithZero(Number(objDate.getMonth() + 1)) + "-" + padwithZero(objDate.getDate());
+
+	if (m_timeField && saveTime && (window.document.all(m_timeField).value != "" || m_forceShowTime))
+		dateString += " " + getHoursPart(objDate);
+
+	objDate.setSeconds(0);
+	objDate.setMilliseconds(0);
+
+	var d1 = "";
+	var d2 = "";
+	try {
+		d1 = this.txtDateBox.date.toString();
+	} catch (e) { }
+
+	try {
+		d2 = objDate.toString()
+	} catch (e) { }
+
+	this.dPicker.selectedDate = objDate;
+
+	window.document.all(m_valueField).value = dateString;
+	window.document.all(m_valueField).date = objDate;
+
+	if (m_timeField && saveTime && (window.document.all(m_timeField).value != "" || m_forceShowTime))
+		window.document.all(m_timeField).value =  getHoursPart(objDate);
+
+	this.txtDateBox.date = objDate;
+	this.txtDateBox.style.borderColor = "";
+
+	var displayMode = this.txtDateBox.displayMode ? this.txtDateBox.displayMode : "short";
+	if (this.m_languageCode == "fa") {
+		if (displayMode.search(/long/ig) != -1) {
+			this.txtDateBox.dir = "rtl";
+			this.txtDateBox.style.textAlign = "right";
+			this.txtDateBox.value = getPersianDateString(this.txtDateBox.date);
+		} else {
+			this.txtDateBox.dir = "ltr";
+			this.txtDateBox.style.textAlign = "left";
+			this.txtDateBox.value = getPersianShortDateString(this.txtDateBox.date);
+		}
+	} else {
+		if (displayMode.search(/long/ig) != -1) {
+			this.txtDateBox.dir = "ltr";
+			this.txtDateBox.style.textAlign = "left";
+			this.txtDateBox.value = this.txtDateBox.date.toDateString();
+		} else {
+			this.txtDateBox.dir = "ltr";
+			this.txtDateBox.style.textAlign = "left";
+			this.txtDateBox.value = Number(this.txtDateBox.date.getMonth() + 1) + "/" + this.txtDateBox.date.getDate() + "/" + this.txtDateBox.date.getFullYear();
+		}
+	}
+
+	if (d1 != d2)
+		event_onDateChange.fire();
+
+	f_setBackgroundColor("");
+}
+
+function resolveDate(dateBox, dateValue) {
+	if (date.getFullYear() > 1900) {
+		var displayMode = dateBox.displayMode ? dateBox.displayMode : "short";
+
+		if (!dateBox.date)
+			dateBox.date = date;
+		else {
+			with (dateBox.date) {
+				setFullYear(date.getFullYear());
+				setMonth(date.getMonth());
+				setDate(date.getDate());
+			}
+		}
+	}
+
+	if (isNaN(Date.parse(dateBox.date))) {
+		dateBox.value = "Invalid date";
+		dateBox.style.borderColor = "red";
+		dateBox.dir = "ltr";
+		dateBox.style.textAlign = "left";
+		dateBox.date = null;
+	}
+}
+
+function f_setBackgroundColor(color) {
+	this.txtDateBox.style.backgroundColor = color ? color : "";
+
+	try {
+		this.txtTimeBox.style.backgroundColor = color ? color : "";
+	} catch (e) { }
+}
+
+function isTrue(varBool) {
+	switch (typeof (varBool)) {
+		case "boolean":
+			return varBool;
+
+		case "number":
+			return (0 != varBool);
+
+		case "string":
+			return (0 == varBool.search(/1|true/i));
+
+		default:
+			return false;
+	}
+}
+
+function put_enabled(enabled) {
+	m_enabled = isTrue(enabled);
+
+	try {
+		if (enabled) {
+			this.popupButton.disabled = false;
+			this.txtDateBox.disabled = false;
+			this.txtDateBox.readOnly = false;
+			window.document.all(m_valueField).disabled = false;
+		} else {
+			this.popupButton.disabled = true;
+			this.txtDateBox.disabled = true;
+			this.txtDateBox.readOnly = true;
+			window.document.all(m_valueField).disabled = true;
+		}
+	} catch (e) { }
+}
+
+function get_enabled() {
+	return m_enabled;
+}
+
+function put_disabled(disabled) {
+	put_enabled(!disabled);
+}
+
+function get_disabled() {
+	return !get_enabled();
+}
+
+function getDateString(date) {
+	try {
+		var year = date.getYear() <= 99 && date.getYear() >= 0 ? parseInt("19" + padwithZero(parseInt(date.getYear()))) : date.getYear();
+		var month = padwithZero(parseInt(date.getMonth()) + 1);
+		var day = padwithZero(parseInt(date.getDate()));
+		return year + '-' + month + '-' + day;
+	}
+	catch (e) { return ""; }
+}
+</script>
+
+<body style="font-size:8pt; font-family:tahoma;">
+	<table style="border-collspse:collapse;" cellpadding="0" cellspacing="0">
+		<tr>
+			<td nowrap>
+				<input type="text" id="txtDate" class="textInput" style="width:140px;" onblur="handleBlur()" onkeyup="handleKeyUp()" onkeydown="handleKeyDown()" tabindex="0">
+				<button id="cmdPopup" class="button" style="width:16px; height:17px; padding:0px; margin:0px;" onclick="event.cancelBubble=true; try{popupCal()}catch(e){};" tabIndex="-1">
+					<img id="cmdDown" width="7" height="7" tabIndex="-1">
+				</button>
+				<input type="text" id="txtTemp" class="timeInput" style="width:50px; display:none;" onblur="applyTime()" tabindex="0">
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

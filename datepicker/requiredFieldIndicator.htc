@@ -1,0 +1,25 @@
+<PUBLIC:COMPONENT tagName="requiredIndicator">
+	<PUBLIC:PROPERTY name="color" internalName="m_color" />
+	<PUBLIC:PROPERTY name="indicator" internalName="m_indicator" />
+	
+	<PUBLIC:ATTACH		event="ondocumentready" handler="onDocumentReady" />
+</PUBLIC:COMPONENT>
+
+<script>
+	var m_color;
+	var m_indicator;
+	
+	function onDocumentReady() {
+		if (m_color)
+			indicator.style.color = m_color;
+		
+		if (m_indicator)
+			indicator.innerText = m_indicator;
+		
+		element.insertAdjacentElement("afterbegin",this.document.body.firstChild);
+	}
+</script>
+<body>
+<span id="indicator" style="color:red; font-weight:bold;">* </span>
+</body>
+</html>
