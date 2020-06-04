@@ -1,16 +1,14 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-		"noImplicitAny": false,
-		"sourceMap": true,
+    "noImplicitAny": false,
+    "sourceMap": true,
     "module": "CommonJS",
     "target": "es3",
-		"allowJs": true,
+    "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "lib": [
-      "es2016",
-      "DOM"
-    ]
+    "declaration": true,
+    "lib": ["es2016", "DOM"]
   }
 }

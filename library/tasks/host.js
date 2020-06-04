@@ -1,9 +1,9 @@
-const gulp =  require('gulp');
-const watchTask  =  require('./watch.host.js');
-const watch   = gulp.series( watchTask.watch );
+const gulp = require('gulp');
+const watchTask = require('./watch.host.js');
+const watch = gulp.series(watchTask.watch);
 
 module.exports = {
-	watch
-}
+  watch,
+};
 
-module.exports.default = watch
+module.exports.default = watch;

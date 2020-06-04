@@ -4,7 +4,7 @@
 	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 </head>
 <body>
-	<div id="dynamic-data-modal" >dynamic data Modal</div>
+	<div id="dynamic-data-modal" ></div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.14/es5-shim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.14/es5-sham.min.js"></script>
@@ -13,6 +13,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.5/es6-sham.min.js"></script>
 <script src='../library/dist/bundle.js'></script>
 <script>
-	document.getElementById('dynamic-data-modal').appendChild(window.DynamicDataTable({}));
+	var fields = dialogArguments.fields;
+	fields.map(function(field){
+		var wrap = createElement({tagName: 'div'});
+		field.formData = window.formData[field];
+		wrap.innerHTML = dialogArguments.editCellRenderer(field).input.outerHTML;
+		document.getElementById('dynamic-data-modal').appendChild(wrap);
+	})
+
 </script>
 </html>

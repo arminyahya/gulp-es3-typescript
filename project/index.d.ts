@@ -1,3 +1,3 @@
-interface Window {
-	showModalDialog : (htmlsrc, args, options) => void;
-}
+/// <reference path="../library/index.d.ts" />
+
+declare module 'gulp-es3-typescript';

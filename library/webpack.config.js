@@ -1,6 +1,6 @@
 var path = require('path');
-var ES3Plugin = require("webpack-es3-plugin");
-const MinifyPlugin = require("babel-minify-webpack-plugin");
+var ES3Plugin = require('webpack-es3-plugin');
+const MinifyPlugin = require('babel-minify-webpack-plugin');
 
 module.exports = {
   entry: ['./src/main.ts'],
@@ -19,20 +19,14 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ["@babel/preset-env", { "loose": true, "modules": "commonjs" }],
-            plugins: [
-              "babel-plugin-transform-class-properties"
-            ]
-          }
-        }
-
-      }
-    ]
+            presets: ['@babel/preset-env', { loose: true, modules: 'commonjs' }],
+            plugins: ['babel-plugin-transform-class-properties'],
+          },
+        },
+      },
+    ],
   },
-  plugins: [
-    new ES3Plugin() ,
-    new MinifyPlugin()
-  ],
+  plugins: [new ES3Plugin(), new MinifyPlugin()],
 
   resolve: {
     modules: ['node_modules', 'src'],

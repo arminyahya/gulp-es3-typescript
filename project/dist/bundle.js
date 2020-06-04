@@ -69,7 +69,7 @@ var __assign = (this && this.__assign) || function () {
     for (var e in a)
         b.d(d, e, function (b) { return a[b]; }.bind(null, e)); return d; }, b.n = function (a) { var c = a && a.__esModule ? function () { return a['default']; } : function () { return a; }; return b.d(c, 'a', c), c; }, b.o = function (a, b) { return Object.prototype.hasOwnProperty.call(a, b); }, b.p = '', b(b.s = 0); })({ "./src/main.ts": /*!*********************!*\
       !*** ./src/main.ts ***!
-      \*********************/ /*! no static exports found */ function () { document.getElementById('root').appendChild(window.DynamicDataTable({})); }, 0: /*!***************************!*\
+      \*********************/ /*! no static exports found */ function () { var a = window.DynamicDataGrid({ headers: ['countryname', 'countrycode'], initialFormData: [{ countryname: 'netherlands', countrycode: '20' }], displayCellRenderer: function (a) { return { input: window.createElement({ tagName: 'input', props: { value: a.formData, disabled: !0 } }), cellProps: { colSpan: a.col } }; }, editCellRenderer: function (a) { return { input: window.withLabel(window.createElement({ tagName: 'input', props: { value: a.formData || '' } }), a.name), cellProps: { colSpan: a.col } }; }, rowsData: { fields: [{ name: 'countryname', col: 1 }, { name: 'countrycode', col: 3 }] } }); document.getElementById('root').appendChild(a); }, 0: /*!***************************!*\
     !*** multi ./src/main.ts ***!
     \***************************/ /*! no static exports found */ function (a, b, c) { a.exports = c(/*! ./src/main.ts */ './src/main.ts'); } });
 //# sourceMappingURL=bundle.js.map
