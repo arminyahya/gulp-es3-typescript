@@ -1,6 +1,6 @@
-var path = require('path');
-var ES3Plugin = require('webpack-es3-plugin');
-const MinifyPlugin = require('babel-minify-webpack-plugin');
+var path = require('path')
+var ES3Plugin = require('webpack-es3-plugin')
+const MinifyPlugin = require('babel-minify-webpack-plugin')
 
 module.exports = {
   entry: ['./src/main.ts'],
@@ -36,4 +36,4 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
-};
+}

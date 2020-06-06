@@ -1,5 +1,5 @@
-import { mapIntoTD } from '../tableBaseOnRow';
-import { createElement } from '../../utils';
+import { mapIntoTD } from '../tableBaseOnRow'
+import { createElement } from '../../utils'
 
 export function addNewRow(onAdd) {
   return {
@@ -12,13 +12,13 @@ export function addNewRow(onAdd) {
             type: 'button',
             value: '+',
             onclick: () => {
-              onAdd();
+              onAdd()
             },
           },
         }),
       },
     ]),
-  };
+  }
 }
 
 export function removeCell(index, onRemove) {
@@ -30,12 +30,12 @@ export function removeCell(index, onRemove) {
         type: 'button',
         value: 'x',
         onclick: () => {
-          onRemove(index);
+          onRemove(index)
         },
       },
     }),
     cellProps: { style: { width: '50px' } },
-  };
+  }
 }
 
 export function settingCell(index, onSetting) {
@@ -47,9 +47,9 @@ export function settingCell(index, onSetting) {
         type: 'button',
         value: '...',
         onclick: () => {
-          onSetting(index);
+          onSetting(index)
         },
       },
     }),
-  };
+  }
 }

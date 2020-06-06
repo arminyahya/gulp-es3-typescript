@@ -1,7 +1,7 @@
-import { createElement, renderIntoRoot, withErrorHandling, formToJSON } from '../../utils';
-import * as $ from 'jquery';
-import { Select } from '../../Components';
-import TableBasedRow, { mapIntoTD } from '../../Components/tableBaseOnRow';
+import { createElement, renderIntoRoot, withErrorHandling, formToJSON } from '../../utils'
+import * as $ from 'jquery'
+import { Select } from '../../Components'
+import TableBasedRow, { mapIntoTD } from '../../Components/tableBaseOnRow'
 import {
   formNumberInput,
   firstNameInput,
@@ -18,8 +18,8 @@ import {
   cityInput,
   languageLevelInput,
   languagesInput,
-} from './inputs';
-import { fetchTableLoginFormDefaultValues } from './mockApi';
+} from './inputs'
+import { fetchTableLoginFormDefaultValues } from './mockApi'
 
 const generateTableForm = async function () {
   const {
@@ -38,7 +38,7 @@ const generateTableForm = async function () {
     city,
     languageLevel,
     languages,
-  } = fetchTableLoginFormDefaultValues() as any;
+  } = fetchTableLoginFormDefaultValues() as any
 
   const form = createElement<HTMLFormElement>({
     tagName: 'form',
@@ -46,11 +46,11 @@ const generateTableForm = async function () {
       id: 'table-form',
       dir: 'ltr',
     },
-  });
+  })
 
   form.onsubmit = function (e) {
-    return false;
-  };
+    return false
+  }
   const button = createElement<HTMLInputElement>({
     tagName: 'input',
     props: {
@@ -60,16 +60,16 @@ const generateTableForm = async function () {
         margin: '10px',
       },
       onclick: function (e) {
-        console.log(formToJSON('#table-form'));
+        console.log(formToJSON('#table-form'))
       },
     },
-  });
+  })
 
   const rowOneTableMainSource = {
     formNumber: { value: formNumber, type: 'text', name: 'formNumber' },
     firstName: { value: firstName, type: 'text', name: 'firstName' },
     lastName: { value: lastName, type: 'text', name: 'lastName' },
-  };
+  }
 
   const rowTwoTableMainSource = {
     fromDate: { value: fromDate, type: 'text', name: 'fromDate' },
@@ -82,7 +82,7 @@ const generateTableForm = async function () {
       ],
       name: 'status',
     },
-  };
+  }
 
   const rowThreeTableMainSource = {
     employmentType: {
@@ -109,25 +109,25 @@ const generateTableForm = async function () {
       ],
       name: 'maritalStatus',
     },
-  };
+  }
 
   const rowFourTableMainSource = {
     country: { value: country, type: 'text', name: 'country' },
     fromBirthDate: { value: fromBirthDate, type: 'text', name: 'fromBirthDate' },
     toBirthDate: { value: toBirthDate, type: 'text', name: 'toBirthDate' },
-  };
+  }
 
   const rowFiveTableMainSource = {
     city: { value: city, type: 'text', name: 'city' },
     languageLevel: { value: languageLevel, type: 'text', name: 'languageLevel' },
     languages: { value: languages, type: 'text', name: 'languages' },
-  };
+  }
 
   const rowSixTableMainSource = {
     a: { value: city, type: 'text', name: 'city' },
     b: { value: languageLevel, type: 'text', name: 'languageLevel' },
     c: { value: languages, type: 'text', name: 'languages' },
-  };
+  }
 
   const mainRows = [
     {
@@ -165,31 +165,31 @@ const generateTableForm = async function () {
         { input: languagesInput(rowFiveTableMainSource.languages) },
       ]),
     },
-  ];
+  ]
 
-  const state = { rows: mainRows };
+  const state = { rows: mainRows }
 
   const render = function () {
-    const mainTable = TableBasedRow({ rows: state.rows });
-    const fieldSet = createElement({ tagName: 'fieldset' });
-    const legend = createElement({ tagName: 'legend' });
-    legend.innerHTML = 'basic info';
-    fieldSet.appendChild(legend);
-    fieldSet.appendChild(mainTable);
-    form.innerHTML = '';
-    form.appendChild(fieldSet);
-    form.appendChild(button);
-    renderIntoRoot(form);
-  };
+    const mainTable = TableBasedRow({ rows: state.rows })
+    const fieldSet = createElement({ tagName: 'fieldset' })
+    const legend = createElement({ tagName: 'legend' })
+    legend.innerHTML = 'basic info'
+    fieldSet.appendChild(legend)
+    fieldSet.appendChild(mainTable)
+    form.innerHTML = ''
+    form.appendChild(fieldSet)
+    form.appendChild(button)
+    renderIntoRoot(form)
+  }
 
   this.setState = function (props) {
     for (const key in props) {
-      state[key] = props[key];
+      state[key] = props[key]
     }
-    render();
-  };
+    render()
+  }
 
-  render();
-};
+  render()
+}
 
-export default generateTableForm;
+export default generateTableForm

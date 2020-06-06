@@ -26,13 +26,13 @@ const defaults = {
   city: 'tehran',
   languageLevel: 'intermediate',
   languages: '',
-};
+}
 
 export const fetchTableLoginFormDefaultValues = function () {
-  return defaults;
+  return defaults
   // return new Promise((resolve, reject) => {
   // 	setTimeout(() => {
   // 		resolve(defaults);
   // 	}, 0)
   // })
-};
+}

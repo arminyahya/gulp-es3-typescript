@@ -1,5 +1,5 @@
-import { Modal } from '../components';
+import { Modal } from '../components'
 
-const example = Modal({ htmlSrc: './example-modal.html' });
+const example = Modal({ htmlSrc: './example-modal.html' })
 
-export default example;
+export default example
