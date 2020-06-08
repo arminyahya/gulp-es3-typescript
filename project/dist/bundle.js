@@ -67,9 +67,19 @@ var __assign = (this && this.__assign) || function () {
     return a; if (4 & c && 'object' == typeof a && a && a.__esModule)
     return a; var d = Object.create(null); if (b.r(d), Object.defineProperty(d, 'default', { enumerable: !0, value: a }), 2 & c && 'string' != typeof a)
     for (var e in a)
-        b.d(d, e, function (b) { return a[b]; }.bind(null, e)); return d; }, b.n = function (a) { var c = a && a.__esModule ? function () { return a['default']; } : function () { return a; }; return b.d(c, 'a', c), c; }, b.o = function (a, b) { return Object.prototype.hasOwnProperty.call(a, b); }, b.p = '', b(b.s = 0); })({ "./src/main.ts": /*!*********************!*\
-      !*** ./src/main.ts ***!
-      \*********************/ /*! no static exports found */ function () { var a = window.Didgah4DynamicDataLibrary, b = a.DynamicDataGrid({ headers: ['countryname', 'countrycode'], initialFormData: [{ countryname: 'netherlands', countrycode: '20' }], displayCellRenderer: function (b) { return { input: a.createElement({ tagName: 'input', props: { value: b.formData, disabled: !0 } }), cellProps: { colSpan: b.col } }; }, editCellRenderer: function (b) { return { input: a.withLabel(a.createElement({ tagName: 'input', props: { value: b.formData || '', fieldName: b.name } }), b.name), cellProps: { colSpan: b.col } }; }, rowsData: { fields: [{ name: 'countryname', col: 1 }, { name: 'countrycode', col: 3 }] } }); document.getElementById('root').appendChild(b); }, 0: /*!***************************!*\
+        b.d(d, e, function (b) { return a[b]; }.bind(null, e)); return d; }, b.n = function (a) { var c = a && a.__esModule ? function () { return a['default']; } : function () { return a; }; return b.d(c, 'a', c), c; }, b.o = function (a, b) { return Object.prototype.hasOwnProperty.call(a, b); }, b.p = '', b(b.s = 0); })({ "./src/anotherGrid.ts": /*!****************************!*\
+      !*** ./src/anotherGrid.ts ***!
+      \****************************/ /*! no static exports found */ function (a, b) {
+        'use strict';
+        b.__esModule = !0, b['default'] = function () { return { headers: ['a'], initialFormData: [{ a: 'Armin' }], displayCellRenderer: function () { var a = document.createElement('input'); return a.setAttribute('value', '??'), a.setAttribute('disabled', 'true'), { input: a, cellProps: {} }; }, editCellRenderer: function (a) { return { input: window.Didgah4DynamicDataLibrary.withLabel(window.Didgah4DynamicDataLibrary.createElement({ tagName: 'input', props: { value: a.formData || '', fieldName: a.name } }), a.name), cellProps: { colSpan: a.col } }; }, rowsData: { fields: [{ name: 'a', col: 1, Type: { IsBundle: !1 } }] } }; };
+    }, "./src/main.ts": /*!*********************!*\
+    !*** ./src/main.ts ***!
+    \*********************/ /*! no static exports found */ function (a, b, c) {
+        'use strict';
+        b.__esModule = !0;
+        var e = c(/*! ./anotherGrid */ './src/anotherGrid.ts');
+        window.jQuery(document).ready(function () { var a = window.Didgah4DynamicDataLibrary, b = a.DynamicDataGrid({ headers: ['countryname', 'countrycode', 'grid1'], initialFormData: [{ countryname: 'netherlands', countrycode: '20', grid1: 'stupid' }], displayCellRenderer: function (b) { return { input: a.createElement({ tagName: 'input', props: { value: b.formData, disabled: !0 } }), cellProps: { colSpan: b.col } }; }, editCellRenderer: function (b) { return b.Type.IsBundle ? { input: e['default'](), cellProps: { colSpan: b.col } } : { input: a.withLabel(a.createElement({ tagName: 'input', props: { value: b.formData || '', fieldName: b.name } }), b.name), cellProps: { colSpan: b.col } }; }, rowsData: { fields: [{ name: 'countryname', col: 1, Type: { IsBundle: !1 } }, { name: 'countrycode', col: 3, Type: { IsBundle: !1 } }, { name: 'grid1', col: 1, Type: { IsBundle: !0 } }] } }); document.getElementById('root').appendChild(b); });
+    }, 0: /*!***************************!*\
     !*** multi ./src/main.ts ***!
     \***************************/ /*! no static exports found */ function (a, b, c) { a.exports = c(/*! ./src/main.ts */ './src/main.ts'); } });
 //# sourceMappingURL=bundle.js.map

@@ -1083,17 +1083,18 @@ var __assign = (this && this.__assign) || function () {
             for (var d = arguments[t], a = 0, s = d.length; a < s; a++, i++)
                 o[i] = d[a]; return o; };
         t.__esModule = !0;
-        var i = n(/*! ../../utils */ './src/utils.ts'), d = n(/*! ./staticComponents */ './src/Components/dynamicData/staticComponents.ts'), s = n(/*! .. */ './src/Components/index.ts');
-        t.mapIntoTD = function (e) { return e.map(function (e) { return t.toTD(e); }); }, t.toTD = function (e) { var t = i.createElement({ tagName: 'td', props: a({}, e.cellProps) }); return t.appendChild(e.input), t; }, t['default'] = i.withErrorHandling(function (e) { function n() { var e = s.Modal({ htmlSrc: './dynamic-data-modal.html', dialogArguments: { fields: f.fields, formData: C, editCellRenderer: h, onSubmit: function (e) { C.push(e); var n = i.createElement({ tagName: 'tr', props: {} }), o = t.toTD(d.removeCell(C.length - 1, r)); n.appendChild(o); var s = function (o) { var i = t.toTD(m(a(a({}, f.fields.find(function (e) { return e.name === o; })), { formData: e[o] }))); n.appendChild(i); }; for (var p in e)
-                    s(p); var c = t.toTD(d.settingCell(C.length - 1, l)); n.appendChild(c), document.getElementById(v).insertBefore(n, document.getElementById(v).lastChild); } } }); document.getElementById('root').appendChild(e); } function r(e) { var t = document.getElementById(v); t.removeChild(t.childNodes[e]); } function l(e) { var t = s.Modal({ htmlSrc: './dynamic-data-modal.html', dialogArguments: { fields: f.fields, formData: C[e], editCellRenderer: h, onSubmit: function (t) { p(e, t); } } }); document.getElementById('root').appendChild(t); } function p(e, t) { C[e] = t; for (var n, a = document.getElementById(v), o = i.createElement({ tagName: 'tr' }), d = 0, s = c(e); d < s.length; d++)
-            n = s[d], o.appendChild(n); a.insertBefore(o, a.childNodes[e]), a.removeChild(a.childNodes[e + 1]); } function c(e) { return o([t.toTD(d.removeCell(e, r))], t.mapIntoTD(f.fields.map(function (t) { return m(a(a({}, t), { formData: C[e][t.name] })); })), [t.toTD(d.settingCell(e, l))]); } var u = e.headers, m = e.displayCellRenderer, h = e.editCellRenderer, g = e.rowsData, f = void 0 === g ? {} : g, y = e.initialFormData, x = void 0 === y ? [] : y, b = i.elementIdGenerator.gererate(), v = i.elementIdGenerator.gererate(), C = o(x), T = function () { return o(C.map(function (e, t) { return { renderer: c(t) }; }), [d.addNewRow(n)]); }(); return function () { var e = i.createElement({ tagName: 'table', props: { className: 'table-base-row', id: b, dir: 'rtl' } }), t = i.createElement({ tagName: 'thead' }), n = i.createElement({ tagName: 'tr' }), a = i.createElement({ tagName: 'tbody', props: { id: v } }); n.appendChild(i.createElement({ tagName: 'th' })); for (var o = 0, d = u; o < d.length; o++) {
+        var i = n(/*! ../../utils */ './src/utils.ts'), d = n(/*! ./staticComponents */ './src/Components/dynamicData/staticComponents.ts'), s = n(/*! .. */ './src/Components/index.ts'), r = n(/*! ../tableBaseOnRow */ './src/Components/tableBaseOnRow.ts');
+        t.toTD = function (e) { var t = i.createElement({ tagName: 'td', props: a({}, e.cellProps) }); return t.appendChild(e.input), t; };
+        t['default'] = i.withErrorHandling(function (e) { function n(e) { return o([t.toTD(d.removeCell(e, p))], r.mapIntoTD(x.fields.map(function () { return { input: i.createElement({ tagName: 'input', props: { value: 'Hey Im Value' } }), cellProps: {} }; })), [t.toTD(d.settingCell(e, c))]); } function l() { var e = s.Modal({ htmlSrc: './dynamic-data-modal.html', dialogArguments: { fields: x.fields, formData: N, editCellRenderer: f, onSubmit: function (e) { N.push(e), C && C(N); var n = i.createElement({ tagName: 'tr', props: {} }), o = t.toTD(d.removeCell(N.length - 1, p)); n.appendChild(o); var s = function (o) { var i = t.toTD(g(a(a({}, x.fields.find(function (e) { return e.name === o; })), { formData: e[o] }))); n.appendChild(i); }; for (var r in e)
+                    s(r); var l = t.toTD(d.settingCell(N.length - 1, c)); n.appendChild(l), document.getElementById(w).insertBefore(n, document.getElementById(w).lastChild); } } }); document.getElementById('root').appendChild(e); } function p(e) { N.splice(e, 1), C && C(N); var t = document.getElementById(w); t.removeChild(t.childNodes[e]); } function c(e) { var t = s.Modal({ htmlSrc: './dynamic-data-modal.html', dialogArguments: { fields: x.fields, formData: N[e], editCellRenderer: f, onSubmit: function (t) { u(e, t); } } }); t && document.getElementById('root').appendChild(t.cloneNode(!0)); } function u(e, t) { N[e] = t, C && C(N); for (var a, o = document.getElementById(w), d = i.createElement({ tagName: 'tr' }), s = 0, r = n(e); s < r.length; s++)
+            a = r[s], d.appendChild(a); o.insertBefore(d, o.childNodes[e]), o.removeChild(o.childNodes[e + 1]); } var m = e.headers, h = void 0 === m ? [] : m, g = e.displayCellRenderer, f = e.editCellRenderer, y = e.rowsData, x = void 0 === y ? {} : y, b = e.initialFormData, v = void 0 === b ? [] : b, C = e.onUpdateFormData, T = i.elementIdGenerator.gererate(), w = i.elementIdGenerator.gererate(), N = o(v), E = function () { return o(N.map(function (e, t) { return { renderer: n(t) }; }), [d.addNewRow(l)]); }(); return function () { var e = i.createElement({ tagName: 'table', props: { className: 'table-base-row', id: T, dir: 'rtl' } }), t = i.createElement({ tagName: 'thead' }), n = i.createElement({ tagName: 'tr' }), a = i.createElement({ tagName: 'tbody', props: { id: w } }); n.appendChild(i.createElement({ tagName: 'th' })); for (var o = 0, d = h; o < d.length; o++) {
             var s = d[o], r = i.createElement({ tagName: 'th' });
             r.innerHTML = s, n.appendChild(r);
-        } for (var l = 0, p = T; l < p.length; l++) {
-            for (var c, m = p[l], h = i.createElement({ tagName: 'tr', props: {} }), g = 0, f = m.renderer; g < f.length; g++)
-                c = f[g], h.appendChild(c);
-            a.appendChild(h);
-        } return t.appendChild(n), e.appendChild(t), e.appendChild(a), e; }(); }, 'TableBasedRow');
+        } for (var l = 0, p = E; l < p.length; l++) {
+            for (var c, u = p[l], m = i.createElement({ tagName: 'tr', props: {} }), g = 0, f = u.renderer; g < f.length; g++)
+                c = f[g], m.appendChild(c);
+            a.appendChild(m);
+        } return t.appendChild(n), e.appendChild(t), e.appendChild(a), e; }(); }, 'DynamicData/Grid');
     }, "./src/Components/dynamicData/staticComponents.ts": /*!********************************************************!*\
     !*** ./src/Components/dynamicData/staticComponents.ts ***!
     \********************************************************/ /*! no static exports found */ function (e, t, n) {
@@ -1159,16 +1160,13 @@ var __assign = (this && this.__assign) || function () {
     !*** ./src/Components/tableBaseOnRow.ts ***!
     \******************************************/ /*! no static exports found */ function (e, t, n) {
         'use strict';
-        var a = this && this.__assign || function () { return a = Object.assign || function (e) { for (var t, a = 1, o = arguments.length; a < o; a++)
-            for (var n in t = arguments[a], t)
-                Object.prototype.hasOwnProperty.call(t, n) && (e[n] = t[n]); return e; }, a.apply(this, arguments); };
         t.__esModule = !0;
-        var o = n(/*! ../utils */ './src/utils.ts');
-        t.mapIntoTD = function (e) { return e.map(function (e) { var t = o.createElement({ tagName: 'td', props: a({}, e.cellProps) }); return t.appendChild(e.input), t; }); }, t['default'] = o.withErrorHandling(function (e) { for (var t = e.rows, n = o.createElement({ tagName: 'table', props: { className: 'table-base-row' } }), a = o.createElement({ tagName: 'tbody' }), i = 0, d = t; i < d.length; i++) {
-            for (var s, r = d[i], l = o.createElement({ tagName: 'tr', props: {} }), p = 0, c = r.renderer; p < c.length; p++)
+        var a = n(/*! ../utils */ './src/utils.ts'), o = n(/*! ./dynamicData/gride */ './src/Components/dynamicData/gride.ts');
+        t.mapIntoTD = function (e) { return void 0 === e && (e = []), e.map(function (e) { return o.toTD(e); }); }, t['default'] = a.withErrorHandling(function (e) { for (var t = e.rows, n = a.createElement({ tagName: 'table', props: { className: 'table-base-row' } }), o = a.createElement({ tagName: 'tbody' }), i = 0, d = t; i < d.length; i++) {
+            for (var s, r = d[i], l = a.createElement({ tagName: 'tr', props: {} }), p = 0, c = r.renderer; p < c.length; p++)
                 s = c[p], l.appendChild(s);
-            a.appendChild(l);
-        } return n.appendChild(a), n; }, 'TableBasedRow');
+            o.appendChild(l);
+        } return n.appendChild(o), n; }, 'TableBasedRow');
     }, "./src/Components/withLabel.ts": /*!*************************************!*\
     !*** ./src/Components/withLabel.ts ***!
     \*************************************/ /*! no static exports found */ function (e, t, n) {
@@ -1181,8 +1179,8 @@ var __assign = (this && this.__assign) || function () {
     \*********************/ /*! no static exports found */ function (e, t, n) {
         'use strict';
         t.__esModule = !0;
-        var a = n(/*! jquery */ './node_modules/jquery/dist/jquery.js'), o = n(/*! ./Components/dynamicData/gride */ './src/Components/dynamicData/gride.ts'), i = n(/*! ./utils */ './src/utils.ts'), d = n(/*! ./Components */ './src/Components/index.ts'), s = {};
-        s.elementIdGenerator = i.elementIdGenerator, s.formToJSON = i.formToJSON, s.dialogFormToJSON = i.dialogFormToJSON, s.withLabel = d.withLabel, s.mapIntoTD = o.mapIntoTD, s.createElement = i.createElement, s.DynamicDataGrid = o['default'], window.jQuery = a, window.Didgah4DynamicDataLibrary = s;
+        var a = n(/*! jquery */ './node_modules/jquery/dist/jquery.js'), o = n(/*! ./Components/dynamicData/gride */ './src/Components/dynamicData/gride.ts'), i = n(/*! ./utils */ './src/utils.ts'), d = n(/*! ./Components */ './src/Components/index.ts'), s = n(/*! ./Components/tableBaseOnRow */ './src/Components/tableBaseOnRow.ts'), r = {};
+        r.elementIdGenerator = i.elementIdGenerator, r.formToJSON = i.formToJSON, r.dialogFormToJSON = i.dialogFormToJSON, r.withLabel = d.withLabel, r.mapIntoTD = s.mapIntoTD, r.createElement = i.createElement, r.DynamicDataGrid = o['default'], window.jQuery = a, window.Didgah4DynamicDataLibrary = r;
     }, "./src/utils.ts": /*!**********************!*\
     !*** ./src/utils.ts ***!
     \**********************/ /*! no static exports found */ function (e, t, n) {
@@ -1199,7 +1197,7 @@ var __assign = (this && this.__assign) || function () {
             return e.apply(void 0, n);
         }
         catch (n) {
-            console.error('error happend in' + t, n);
+            alert('error happend in ' + t + ' ' + n.message || !1);
         } }; }, t.formToJSON = function (e) { var t = {}; return a(e).find('input').each(function () { var e = a(this), n = e.attr('fieldName'); t[n] = t[n] ? t[n] + ',' + e.val() : e.val(); }), t; }, t.dialogFormToJSON = function () { var e = {}; return a('input[type="text"]').each(function () { var t = a(this), n = t.attr('fieldName'); e[n] = e[n] ? e[n] + ',' + t.val() : t.val(); }), e; };
     }, 0: /*!***************************!*\
     !*** multi ./src/main.ts ***!

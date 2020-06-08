@@ -51,7 +51,6 @@ interface createElementArgs<T> {
 export const createElement = function <T = any>({ tagName, props, onMount }: createElementArgs<T>) {
   const element = document.createElement(tagName) as HTMLElement
   const idGenerator = elementIdGenerator
-
   for (const prop in props) {
     if (prop === 'style') {
       for (const style in props[prop]) {
@@ -79,7 +78,7 @@ export const withErrorHandling = <T extends (...args: any[]) => any>(component: 
   try {
     return component(...args)
   } catch (e) {
-    console.error('error happend in' + componentName, e)
+    alert('error happend in ' + componentName + ' ' + e.message || e)
   }
 }
 

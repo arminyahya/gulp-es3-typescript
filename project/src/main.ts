@@ -1,13 +1,18 @@
+import AnotherGrid from './anotherGrid';
+
+window.jQuery(document).ready(() => {
+
 const library = window.Didgah4DynamicDataLibrary;
 
 const initialFormData = [
 	{
 		countryname: "netherlands",
 		countrycode: "20",
+		grid1: 'stupid'
 	},
 ];
-const table = library.DynamicDataGrid({
-	headers: ["countryname", "countrycode"],
+const grid = library.DynamicDataGrid({
+	headers: ["countryname", "countrycode", 'grid1'],
 	initialFormData,
 	displayCellRenderer: function (d) {
 		return {
@@ -19,24 +24,29 @@ const table = library.DynamicDataGrid({
 		};
 	},
 	editCellRenderer: function (d) {
-		return {
-			input: library.withLabel(
-				library.createElement({
-					tagName: "input",
-					props: { value: d.formData || "", fieldName: d.name},
-				}),
-				d.name
-			),
-			cellProps: { colSpan: d.col },
-		};
+		if(d.Type.IsBundle) {
+			return 	{ input: AnotherGrid(), cellProps: { colSpan: d.col}}
+			
+		} else {
+			return {
+				input: library.withLabel(
+					library.createElement({
+						tagName: "input",
+						props: { value: d.formData || "", fieldName: d.name },
+					}),
+					d.name
+					),
+					cellProps: { colSpan: d.col },
+				};
+			}
 	},
 	rowsData: {
 		fields: [
-			{ name: "countryname", col: 1 },
-			{ name: "countrycode", col: 3 },
+			{ name: "countryname", col: 1, Type: { IsBundle: false } },
+			{ name: "countrycode", col: 3, Type: { IsBundle: false } },
+			{ name: "grid1", col: 1,  Type: { IsBundle: true } },
 		],
 	},
 });
-
-document.getElementById("root").appendChild(table);
-
+document.getElementById("root").appendChild(grid);
+})

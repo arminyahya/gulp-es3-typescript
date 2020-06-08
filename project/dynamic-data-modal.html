@@ -13,6 +13,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.5/es6-sham.min.js"></script>
 	<script src="../library/dist/bundle.js"></script>
 	<script>
+		try {
 		var library = window.Didgah4DynamicDataLibrary;
 		var fields = dialogArguments.fields;
 		var formId = library.elementIdGenerator.gererate();
@@ -20,7 +21,22 @@
 		fields.map(function (field) {
 			var wrap = library.createElement({ tagName: "div" });
 			field.formData = dialogArguments.formData[field.name];
-			wrap.innerHTML =  dialogArguments.editCellRenderer(field).input.outerHTML;
+			if( field.Type.IsBundle) {
+				var input =  dialogArguments.editCellRenderer(field).input;;
+				wrap.appendChild(library.DynamicDataGrid({
+					headers: ['a'],
+					initialFormData: input.initialFormData,
+					rowsData: {
+							fields: [
+								{ name: "a", col: 1, Type: { IsBundle: false } }
+							]
+						},
+					displayCellRenderer: input.displayCellRenderer,
+					editCellRenderer: input.editCellRenderer
+				}));
+			} else {
+				wrap.innerHTML = dialogArguments.editCellRenderer(field).input.outerHTML;
+			}
 			form.appendChild(wrap);
 		});
 		document.getElementById("dynamic-data-modal").appendChild(form);
@@ -37,5 +53,8 @@
 			 }
 		});
 		document.getElementById("dynamic-data-modal").appendChild(button);
+	} catch(e) {
+		document.write(e.message);
+	}
 	</script>
 </html>

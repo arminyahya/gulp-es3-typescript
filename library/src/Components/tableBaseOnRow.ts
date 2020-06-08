@@ -1,4 +1,5 @@
 import { isObjectDomElement, createElement, withErrorHandling } from '../utils'
+import { TableCellType, toTD } from './dynamicData/gride'
 type TableRow = {
   renderer: HTMLElement[]
 }
@@ -27,12 +28,10 @@ interface data {
   input: HTMLElement
   cellProps?: Partial<Omit<HTMLTableDataCellElement, 'style'> & { style?: Partial<CSSStyleDeclaration> }>
 }
-export const mapIntoTD = (data: data[]) => {
+
+export const mapIntoTD = (data: TableCellType[] = []) => {
   return data.map((item) => {
-    const td = createElement<HTMLTableDataCellElement>({ tagName: 'td', props: { ...item.cellProps } })
-    td.appendChild(item.input)
-    return td
+    return toTD(item)
   })
 }
-
 export default withErrorHandling<({ ...args }: Props) => void>(TableBasedRow, 'TableBasedRow')

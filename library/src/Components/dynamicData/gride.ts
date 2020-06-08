@@ -3,6 +3,20 @@ import { isObjectDomElement, createElement, withErrorHandling, elementIdGenerato
 import { addNewRow, removeCell, settingCell } from './staticComponents'
 import { Modal, TableBaseOnRow } from '..'
 import dynamicDataForm from '../dynamicDataForm'
+import { mapIntoTD } from '../tableBaseOnRow'
+
+export interface TableCellType {
+  input: HTMLElement
+  cellProps?: Partial<Omit<HTMLTableDataCellElement, 'style'> & { style?: Partial<CSSStyleDeclaration> }>
+}
+
+export const toTD = (data: TableCellType) => {
+  const td = createElement<HTMLTableDataCellElement>({ tagName: 'td', props: { ...data.cellProps } })
+  td.appendChild(data.input);
+  // this work if document changed but not for event listeners
+  // td.innerHTML = data.input.outerHTML
+  return td
+}
 
 type TableRow = {
   renderer: HTMLElement[]
@@ -14,19 +28,20 @@ interface Props {
   editCellRenderer: (d) => TableCellType
   rowsData: any /* specific interface later */
   initialFormData?: any[]
+  onUpdateFormData?: (d) => void
 }
 
 const DynamicDataGrid = ({
-  headers,
+  headers = [],
   displayCellRenderer,
   editCellRenderer,
   rowsData = {},
   initialFormData = [],
+  onUpdateFormData,
 }: Props) => {
   const tableId = elementIdGenerator.gererate()
   const tableBodyId = elementIdGenerator.gererate()
   const formData = [...initialFormData]
-
   const displayRows: TableRow[] = getDisplayRows()
 
   function getDisplayRows() {
@@ -38,9 +53,31 @@ const DynamicDataGrid = ({
     ]
   }
 
+  function getRowElements(index) {
+    return [
+      toTD(removeCell(index, onRemove)),
+      ...mapIntoTD(
+        rowsData.fields.map(
+          (fieldData, fieldI) => ({
+            input: createElement({ tagName: 'input', props: { value: 'Hey Im Value' } }),
+            cellProps: {},
+          })
+          // ({
+          //   input: displayCellRenderer({ ...fieldData, formData: formData[index][fieldData.name] }).input,
+          //   cellProps: {},
+          // })
+        )
+      ),
+      toTD(settingCell(index, onSetting)),
+    ]
+  }
+
   function onAdd() {
     const onSubmit = function (data) {
       formData.push(data)
+      if (onUpdateFormData) {
+        onUpdateFormData(formData)
+      }
       const tr = createElement({ tagName: 'tr', props: {} })
       const removeTd = toTD(removeCell(formData.length - 1, onRemove))
       tr.appendChild(removeTd)
@@ -67,6 +104,10 @@ const DynamicDataGrid = ({
   }
 
   function onRemove(index: number) {
+    formData.splice(index, 1)
+    if (onUpdateFormData) {
+      onUpdateFormData(formData)
+    }
     const tableBody = document.getElementById(tableBodyId)
     tableBody.removeChild(tableBody.childNodes[index])
   }
@@ -83,11 +124,16 @@ const DynamicDataGrid = ({
         },
       },
     })
-    document.getElementById('root').appendChild(modal)
+    if (modal) {
+      document.getElementById('root').appendChild(modal.cloneNode(true))
+    }
   }
 
   function changeRowData(index, data) {
     formData[index] = data
+    if (onUpdateFormData) {
+      onUpdateFormData(formData)
+    }
     const tableBody = document.getElementById(tableBodyId)
     const tr = createElement({ tagName: 'tr' })
     for (const td of getRowElements(index)) {
@@ -95,18 +141,6 @@ const DynamicDataGrid = ({
     }
     tableBody.insertBefore(tr, tableBody.childNodes[index])
     tableBody.removeChild(tableBody.childNodes[index + 1])
-  }
-
-  function getRowElements(index) {
-    return [
-      toTD(removeCell(index, onRemove)),
-      ...mapIntoTD(
-        rowsData.fields.map((fieldData, fieldI) =>
-          displayCellRenderer({ ...fieldData, formData: formData[index][fieldData.name] })
-        )
-      ),
-      toTD(settingCell(index, onSetting)),
-    ]
   }
 
   function firstRender() {
@@ -142,20 +176,4 @@ const DynamicDataGrid = ({
   return firstRender()
 }
 
-export interface TableCellType {
-  input: HTMLElement
-  cellProps?: Partial<Omit<HTMLTableDataCellElement, 'style'> & { style?: Partial<CSSStyleDeclaration> }>
-}
-
-export const mapIntoTD = (data: TableCellType[]) => {
-  return data.map((item) => {
-    return toTD(item)
-  })
-}
-
-export const toTD = (data: TableCellType) => {
-  const td = createElement<HTMLTableDataCellElement>({ tagName: 'td', props: { ...data.cellProps } })
-  td.appendChild(data.input)
-  return td
-}
-export default withErrorHandling<({ ...args }: Props) => void>(DynamicDataGrid, 'TableBasedRow')
+export default withErrorHandling<({ ...args }: Props) => void>(DynamicDataGrid, 'DynamicData/Grid')
