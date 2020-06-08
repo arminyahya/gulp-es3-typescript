@@ -21,21 +21,12 @@
 		fields.map(function (field) {
 			var wrap = library.createElement({ tagName: "div" });
 			field.formData = dialogArguments.formData[field.name];
-			if( field.Type.IsBundle) {
-				var input =  dialogArguments.editCellRenderer(field).input;;
-				wrap.appendChild(library.DynamicDataGrid({
-					headers: ['a'],
-					initialFormData: input.initialFormData,
-					rowsData: {
-							fields: [
-								{ name: "a", col: 1, Type: { IsBundle: false } }
-							]
-						},
-					displayCellRenderer: input.displayCellRenderer,
-					editCellRenderer: input.editCellRenderer
-				}));
+			if(field.Type.IsBundle) {
+				var input = dialogArguments.editCellRenderer(field, window.document).input;;
+				input.currentDocument =  window.document;
+				wrap.appendChild(library.DynamicDataGrid(input));
 			} else {
-				wrap.innerHTML = dialogArguments.editCellRenderer(field).input.outerHTML;
+				wrap.appendChild(dialogArguments.editCellRenderer(field, window.document).input());
 			}
 			form.appendChild(wrap);
 		});

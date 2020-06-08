@@ -6,13 +6,17 @@ import dynamicDataForm from '../dynamicDataForm'
 import { mapIntoTD } from '../tableBaseOnRow'
 
 export interface TableCellType {
-  input: HTMLElement
+  input: () => HTMLElement
   cellProps?: Partial<Omit<HTMLTableDataCellElement, 'style'> & { style?: Partial<CSSStyleDeclaration> }>
 }
 
-export const toTD = (data: TableCellType) => {
-  const td = createElement<HTMLTableDataCellElement>({ tagName: 'td', props: { ...data.cellProps } })
-  td.appendChild(data.input);
+export const toTD = (data: TableCellType, currentDocument: any = window.document) => {
+  const td = createElement<HTMLTableDataCellElement>({
+    currentDocument: currentDocument,
+    tagName: 'td',
+    props: { ...data.cellProps },
+  })
+  td.appendChild(data.input())
   // this work if document changed but not for event listeners
   // td.innerHTML = data.input.outerHTML
   return td
@@ -29,6 +33,7 @@ interface Props {
   rowsData: any /* specific interface later */
   initialFormData?: any[]
   onUpdateFormData?: (d) => void
+  currentDocument?: any
 }
 
 const DynamicDataGrid = ({
@@ -38,6 +43,7 @@ const DynamicDataGrid = ({
   rowsData = {},
   initialFormData = [],
   onUpdateFormData,
+  currentDocument = window.document,
 }: Props) => {
   const tableId = elementIdGenerator.gererate()
   const tableBodyId = elementIdGenerator.gererate()
@@ -57,16 +63,14 @@ const DynamicDataGrid = ({
     return [
       toTD(removeCell(index, onRemove)),
       ...mapIntoTD(
-        rowsData.fields.map(
-          (fieldData, fieldI) => ({
-            input: createElement({ tagName: 'input', props: { value: 'Hey Im Value' } }),
-            cellProps: {},
-          })
-          // ({
-          //   input: displayCellRenderer({ ...fieldData, formData: formData[index][fieldData.name] }).input,
-          //   cellProps: {},
-          // })
-        )
+        rowsData.fields.map((fieldData, fieldI) => ({
+          input: displayCellRenderer({
+            ...fieldData,
+            formData: formData[index][fieldData.name],
+            currentDocument: currentDocument,
+          }).input,
+          cellProps: {},
+        }))
       ),
       toTD(settingCell(index, onSetting)),
     ]
@@ -78,7 +82,7 @@ const DynamicDataGrid = ({
       if (onUpdateFormData) {
         onUpdateFormData(formData)
       }
-      const tr = createElement({ tagName: 'tr', props: {} })
+      const tr = createElement({ currentDocument: currentDocument, tagName: 'tr', props: {} })
       const removeTd = toTD(removeCell(formData.length - 1, onRemove))
       tr.appendChild(removeTd)
       for (const item in data) {
@@ -135,7 +139,7 @@ const DynamicDataGrid = ({
       onUpdateFormData(formData)
     }
     const tableBody = document.getElementById(tableBodyId)
-    const tr = createElement({ tagName: 'tr' })
+    const tr = createElement({ currentDocument: currentDocument, tagName: 'tr' })
     for (const td of getRowElements(index)) {
       tr.appendChild(td)
     }
@@ -149,19 +153,19 @@ const DynamicDataGrid = ({
       tagName: 'table',
       props: { className: 'table-base-row', id: tableId, dir: 'rtl' },
     })
-    const tableHead = createElement({ tagName: 'thead' })
-    const tableheadrow = createElement({ tagName: 'tr' })
-    const tableBody = createElement({ tagName: 'tbody', props: { id: tableBodyId } })
-    tableheadrow.appendChild(createElement({ tagName: 'th' }))
+    const tableHead = createElement({ currentDocument: currentDocument, tagName: 'thead' })
+    const tableheadrow = createElement({ currentDocument: currentDocument, tagName: 'tr' })
+    const tableBody = createElement({ currentDocument: currentDocument, tagName: 'tbody', props: { id: tableBodyId } })
+    tableheadrow.appendChild(createElement({ currentDocument: currentDocument, tagName: 'th' }))
     for (const header of headers) {
-      const th = createElement({ tagName: 'th' })
+      const th = createElement({ currentDocument: currentDocument, tagName: 'th' })
       th.innerHTML = header
       tableheadrow.appendChild(th)
     }
 
     /* add table data */
     for (const row of displayRows) {
-      const tr = createElement({ tagName: 'tr', props: {} })
+      const tr = createElement({ currentDocument: currentDocument, tagName: 'tr', props: {} })
       for (const td of row.renderer) {
         tr.appendChild(td)
       }

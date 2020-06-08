@@ -42,14 +42,20 @@ export const elementIdGenerator = {
 }
 
 interface createElementArgs<T> {
+  currentDocument?: any
   tagName: string
   // override default style type
   props?: Partial<Omit<T, 'style'> & { style?: Partial<CSSStyleDeclaration> }>
   onMount?: () => void
 }
 
-export const createElement = function <T = any>({ tagName, props, onMount }: createElementArgs<T>) {
-  const element = document.createElement(tagName) as HTMLElement
+export const createElement = function <T = any>({
+  currentDocument = window.document,
+  tagName,
+  props,
+  onMount,
+}: createElementArgs<T>) {
+  const element = currentDocument.createElement(tagName) as HTMLElement
   const idGenerator = elementIdGenerator
   for (const prop in props) {
     if (prop === 'style') {

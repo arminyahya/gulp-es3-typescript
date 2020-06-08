@@ -7,18 +7,18 @@ export default function AnotherGrid() {
 			}
 		],
 		displayCellRenderer: function (d) {
-			var inp = document.createElement('input');
-			inp.setAttribute('value', '??');
-
-			inp.setAttribute('disabled', 'true');
-			return  {
-			input: inp,
-			cellProps: { },
+			return {
+				input: () => window.Didgah4DynamicDataLibrary.createElement({
+					currentDocument: d.currentDocument,
+					tagName: "input",
+					props: { value: d.formData, disabled: true },
+				}),
+				cellProps: { colSpan: d.col },
 			};
 		},
 		editCellRenderer: function (d) {
 			return {
-				input: window.Didgah4DynamicDataLibrary.withLabel(
+				input: () => window.Didgah4DynamicDataLibrary.withLabel(
 					window.Didgah4DynamicDataLibrary.createElement({
 						tagName: "input",
 						props: { value: d.formData || "", fieldName: d.name },

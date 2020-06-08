@@ -1,7 +1,5 @@
 import AnotherGrid from './anotherGrid';
-
 window.jQuery(document).ready(() => {
-
 const library = window.Didgah4DynamicDataLibrary;
 
 const initialFormData = [
@@ -16,25 +14,28 @@ const grid = library.DynamicDataGrid({
 	initialFormData,
 	displayCellRenderer: function (d) {
 		return {
-			input: library.createElement({
+			input: () => library.createElement({
 				tagName: "input",
 				props: { value: d.formData, disabled: true },
 			}),
 			cellProps: { colSpan: d.col },
 		};
 	},
-	editCellRenderer: function (d) {
+	editCellRenderer: function (d, currentDocument) {
 		if(d.Type.IsBundle) {
 			return 	{ input: AnotherGrid(), cellProps: { colSpan: d.col}}
 			
 		} else {
 			return {
-				input: library.withLabel(
+				input: () => library.withLabel(
 					library.createElement({
+						currentDocument: currentDocument,
 						tagName: "input",
-						props: { value: d.formData || "", fieldName: d.name },
+						// @ts-ignore
+						props: { type: 'button' || "", onclick: () => {alert(window.arminAttribute()); } },
 					}),
-					d.name
+					d.name,
+					currentDocument,
 					),
 					cellProps: { colSpan: d.col },
 				};

@@ -132,37 +132,37 @@ const generateTableForm = async function () {
   const mainRows = [
     {
       renderer: mapIntoTD([
-        { input: formNumberInput(rowOneTableMainSource.formNumber) },
-        { input: firstNameInput(rowOneTableMainSource.firstName) },
-        { input: lastNameInput(rowOneTableMainSource.lastName) },
+        { input: () => formNumberInput(rowOneTableMainSource.formNumber) },
+        { input: () => firstNameInput(rowOneTableMainSource.firstName) },
+        { input: () => lastNameInput(rowOneTableMainSource.lastName) },
       ]),
     },
     {
       renderer: mapIntoTD([
-        { input: fromDateInput(rowTwoTableMainSource.fromDate) },
-        { input: toDateInput(rowTwoTableMainSource.toDate) },
-        { input: statusInput(rowTwoTableMainSource.status) },
+        { input: () => fromDateInput(rowTwoTableMainSource.fromDate) },
+        { input: () => toDateInput(rowTwoTableMainSource.toDate) },
+        { input: () => statusInput(rowTwoTableMainSource.status) },
       ]),
     },
     {
       renderer: mapIntoTD([
-        { input: employmentTypeInput(rowThreeTableMainSource.employmentType) },
-        { input: genderInput(rowThreeTableMainSource.gender) },
-        { input: maritalStatusInput(rowThreeTableMainSource.maritalStatus) },
+        { input: () => employmentTypeInput(rowThreeTableMainSource.employmentType) },
+        { input: () => genderInput(rowThreeTableMainSource.gender) },
+        { input: () => maritalStatusInput(rowThreeTableMainSource.maritalStatus) },
       ]),
     },
     {
       renderer: mapIntoTD([
-        { input: countryInput(rowFourTableMainSource.country) },
-        { input: fromBirthDateInput(rowFourTableMainSource.fromBirthDate) },
-        { input: toBirthDateInput(rowFourTableMainSource.toBirthDate) },
+        { input: () => countryInput(rowFourTableMainSource.country) },
+        { input: () => fromBirthDateInput(rowFourTableMainSource.fromBirthDate) },
+        { input: () => toBirthDateInput(rowFourTableMainSource.toBirthDate) },
       ]),
     },
     {
       renderer: mapIntoTD([
-        { input: cityInput(rowFiveTableMainSource.city) },
-        { input: languageLevelInput(rowFiveTableMainSource.languageLevel) },
-        { input: languagesInput(rowFiveTableMainSource.languages) },
+        { input: () => cityInput(rowFiveTableMainSource.city) },
+        { input: () => languageLevelInput(rowFiveTableMainSource.languageLevel) },
+        { input: () => languagesInput(rowFiveTableMainSource.languages) },
       ]),
     },
   ]
