@@ -1,5 +1,4 @@
 import AnotherGrid from './anotherGrid';
-window.jQuery(document).ready(() => {
 const library = window.Didgah4DynamicDataLibrary;
 
 const initialFormData = [
@@ -10,33 +9,39 @@ const initialFormData = [
 	},
 ];
 const grid = library.DynamicDataGrid({
+	currentDocument: window.document,
 	headers: ["countryname", "countrycode", 'grid1'],
 	initialFormData,
-	displayCellRenderer: function (d) {
+	displayCellRenderer: function (d, doc) {
 		return {
-			input: () => library.createElement({
-				tagName: "input",
-				props: { value: d.formData, disabled: true },
-			}),
+			input: () => window.Didgah4DynamicDataLibrary.createElement({
+				tagName: 'span',
+				props: { id: d.name === 'grid1' ? 'from-date-datePicker' : '', style: { width: '240px' } },
+				onMount: function () {
+					window.Didgah4DynamicDataLibrary.currentDocumentObj.getCurrentDocument().getElementById(
+						"from-date-datePicker"
+					).innerHTML = `<input type='text' style='display:none;' id='txt123456' name="${
+						d.name || ""
+					}" value="${
+						d.value || ""
+					}" /><ccc:datePicker showTime='true' forceShowTime='true'/>`;
+				},
+		}),
 			cellProps: { colSpan: d.col },
 		};
 	},
-	editCellRenderer: function (d, currentDocument) {
+	editCellRenderer: function (d, document) {
+		library.currentDocumentObj.setCurentDocument(document);
 		if(d.Type.IsBundle) {
-			return 	{ input: AnotherGrid(), cellProps: { colSpan: d.col}}
-			
+			return 	{ input: AnotherGrid(document), cellProps: { colSpan: d.col}}
 		} else {
 			return {
-				input: () => library.withLabel(
-					library.createElement({
-						currentDocument: currentDocument,
+				input: function() {
+					return library.createElement({
 						tagName: "input",
-						// @ts-ignore
-						props: { type: 'button' || "", onclick: () => {alert(window.arminAttribute()); } },
-					}),
-					d.name,
-					currentDocument,
-					),
+						props: { type: 'button', onclick: function(){alert('I Worked?!')}}
+					})
+				},
 					cellProps: { colSpan: d.col },
 				};
 			}
@@ -50,4 +55,3 @@ const grid = library.DynamicDataGrid({
 	},
 });
 document.getElementById("root").appendChild(grid);
-})

@@ -1,13 +1,33 @@
-<!DOCTYPE>
-<html>
-
-<head>
-	<meta http-equiv="X-UA-Compatible" content="IE=5" />
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<script language="javascript">
+  var g_LanguageCode = 'fa'
+  var g_Direction = 'rtl'
+  var g_PersianKeyboardBehavior = 'persian'
+  var g_requiredFieldErrorBackgroundColor = 'pink'
+  var g_winDocAll = window.document.all
+  var g_winDocBody = window.document.body
+  var languageCode = 'fa'
+  var softwareGuid = 'b90f03a0-5b3b-4027-b9ec-247c2d6ddaac'
+</script>
+<html xmlns:WM xmlns:ccc>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=5" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <script
+      src="https://code.jquery.com/jquery-1.12.4.min.js"
+      integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+      crossorigin="anonymous"
+    ></script>
+    <script language="javascript" src="./datepicker/routines.js"></script>
+    <script language="javascript" src="./datepicker/persianDateRoutines.js"></script>
+    <script language="javascript" src="./datepicker/amcharts/amcharts.js"></script>
+    <script language="javascript" src="./datepicker/styles.js"></script>
+		<?IMPORT namespace="ccc" implementation="./datepicker/datePicker.htc">
 	<link rel="stylesheet" href="./index.css" />
-</head>
+  </head>
 
 <body>
+  <div id="Container"></div>
 	<div id="root">
 	</div>
 </body>
@@ -18,5 +38,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.5/es6-shim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.5/es6-sham.min.js"></script>
 <script src='../library/dist/bundle.js'></script>
+<script>
+	window.Didgah4DynamicDataLibrary.currentDocumentObj.setCurentDocument(window.document);
+</script>
 <script src='./dist/bundle.js'></script>
 </html>

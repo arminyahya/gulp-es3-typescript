@@ -1,5 +1,15 @@
 import * as $ from 'jquery'
 
+export const currentDocumentObj = {
+  currentDocument: null,
+  getCurrentDocument: function () {
+    return this.currentDocument
+  },
+  setCurentDocument: function (doc) {
+    this.currentDocument = doc
+  },
+}
+
 export const container = document.getElementById('root')
 
 export const isObjectDomElement = (object) => {
@@ -42,20 +52,14 @@ export const elementIdGenerator = {
 }
 
 interface createElementArgs<T> {
-  currentDocument?: any
   tagName: string
   // override default style type
   props?: Partial<Omit<T, 'style'> & { style?: Partial<CSSStyleDeclaration> }>
   onMount?: () => void
 }
 
-export const createElement = function <T = any>({
-  currentDocument = window.document,
-  tagName,
-  props,
-  onMount,
-}: createElementArgs<T>) {
-  const element = currentDocument.createElement(tagName) as HTMLElement
+export const createElement = function <T = any>({ tagName, props, onMount }: createElementArgs<T>) {
+  const element = currentDocumentObj.getCurrentDocument().createElement(tagName) as HTMLElement
   const idGenerator = elementIdGenerator
   for (const prop in props) {
     if (prop === 'style') {
@@ -71,9 +75,11 @@ export const createElement = function <T = any>({
     if (!props || !props['id']) {
       element.id = idGenerator.gererate()
     }
-    $(element.id).ready(() => {
-      onMount()
-    })
+    $(currentDocumentObj.getCurrentDocument())
+      .find(element.id)
+      .ready(() => {
+        onMount()
+      })
   }
   return element
 }

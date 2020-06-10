@@ -1,0 +1,454 @@
+<html>
+<public:component tagName="recipientSelect">
+
+<public:property name="readonly" />
+<public:property name="checknameControlId" />
+<public:property name="checknameScope" />
+<public:property name="checknameView" />
+<public:property name="type" internalName="m_type" />
+<public:property name="bypassAccessZoneCheck" internalName="m_bypassAccessZoneCheck" />
+
+<public:property name="panicMode" />
+
+<public:property name="direction" internalName="m_direction" />
+<public:property name="unresolvedRecipients" get="get_unresolvedRecipients"/>
+<public:property name="resolvedRecipients"   get="get_resolvedRecipients"/>
+
+<public:property name="recips">
+
+<public:method name="addRecipients" internalName="f_AddRecipients" />
+<public:method name="addRecipientById" internalName="f_getRecipsHTML" />
+<public:method name="addPersonalGroup" internalName="f_getPersonalGroupHTML" />
+<public:method name="removeRecipient" internalName="removeRecip" />
+<public:method name="checkNames" internalName="f_CheckNames" />
+<public:method name="checkName" internalName="f_checkName" />
+<public:method name="focus" internalName="f_focus" />
+
+<public:method name="editRecipient" internalName="f_editRecipient"/>
+<public:method name="getResolvedRecips" internalName="f_getResolvedRecips"/>
+<public:method name="getRecipsHTML" internalName="f_getRecipsHTML"/>
+<public:method name="getRecipsText" internalName="f_getRecipsText"/>
+
+<public:event id="__idExchangeMessageOnCheckNames" name="onchecknames"/>
+<public:event id="__idExchangeMessageOnUpdateRecipients" name="onupdaterecipients"/>
+<public:event id="__idExchangeMessageOnError" name="onerror"/>
+
+<public:attach event="ondocumentready" handler="onDocumentReady" />
+
+</public:component>
+
+<body>
+<div id="divMain" style="padding-left:2px; padding-right:2px; background-color:white; border:1px solid #A5ACB2;">
+	<div id="divTo" style="background-color:white; border-bottom :1px solid #A5ACB2; overflow:auto;" onclick="handleRecipClick()" onkeydown="handleRecipKeydown()" oncontextmenu="handleRecipContextMenu()" ondblclick="handleNameDblClick();"></div>
+	<input type="text" id="txtReceivers" name="MsgTo" class="textInput" value="" style="border:none; width:580px;" disableMouseOverEffect="true" maxlength="100" onchange="checkNames()" onkeypress="handleMsgToKeyPress()" tabIndex="0">
+</div>
+</body>
+
+
+<script>
+
+var m_type;
+var m_bypassAccessZoneCheck = false;
+function handleMsgToKeyPress() {
+	if (event.keyCode == 13)
+		checkNames();
+}
+
+function handleRecipKeydown() {
+	var fCancel = true;
+	switch (event.keyCode) {
+		case 13:
+			selectRecip(getRecip(event));
+			break;
+		case 8:
+		case 46:
+			if (readonly != "1")
+				removeRecip(getRecip(event));
+			break;
+		case 37:
+			if (this.m_direction.search(/rtl/ig) == -1)
+				selectRecip(getPreviousRecip(getRecip(event)));
+			else
+				selectRecip(getNextRecip(getRecip(event)));
+			break;
+		case 38:
+			selectRecip(getPreviousRecip(getRecip(event)));
+			break;
+		case 39:
+			if (this.m_direction.search(/rtl/ig) == -1)
+				selectRecip(getNextRecip(getRecip(event)));
+			else
+				selectRecip(getPreviousRecip(getRecip(event)));
+			break;
+		case 40:
+			selectRecip(getNextRecip(getRecip(event)));
+			break;
+		case 32:
+			selectRecip(getRecip(event));
+			break;
+		case 9:
+			document.selection.empty();
+		default:
+			fCancel = false;
+			break;
+	}
+	
+	if(fCancel) {
+		event.cancelBubble = true;
+		event.returnValue = false;
+	}
+}
+
+function handleNameDblClick() {
+	var oRecip = getRecip(event);
+	if (oRecip) {
+		try {
+			if (oRecip.className.search(/unres/i)!=-1)
+				f_checkName(oRecip);
+		} catch (e) {}
+	}
+}
+
+function handleRecipContextMenu(type) {
+	var oRecip = getRecip(event);
+	if (oRecip) {
+		try {
+			if (oRecip.className.search(/unres/i)==-1)
+				recipsRightClickMenu.all["mnuCheckName"].style.display = "none";
+			else
+				recipsRightClickMenu.all["mnuCheckName"].style.display = "block";
+		} catch (e) {}
+		
+		try {
+			handleRightClick("recips");
+		} catch (e) {}
+
+		selectRecip(oRecip);
+		
+		try {
+			window.document.all["recipsRightClickMenu"].recip = oRecip;
+			window.document.all["recipsRightClickMenu"].recipientSelector = this;
+		} catch (e) {}
+	}
+}
+
+function handleRecipClick() {
+	hideRightClickMenu();
+
+	var oRecip = getRecip(event);
+	if (oRecip != null) {
+		selectRecip(oRecip);
+	} else {
+		try {
+			this.msgTo.focus();
+		} catch (e) {}
+	}
+}
+</script>
+
+<script>
+function getRecip(oEvent) {
+	return (oEvent.srcElement.tagName == "A") ? oEvent.srcElement : null;
+}
+
+function selectRecip(oNode) {
+	if (!oNode)
+		return;
+	
+	var oRng = window.document.body.createTextRange();
+	oRng.moveToElementText(oNode);
+	oRng.select();
+	oNode.focus();
+}
+
+function f_checkName(recip) {
+	var retVal = showControlModal(this.checknameControlId + "&scope=" + this.checknameScope + "&view=" + this.checknameView + "&name=" + toUTF8(recip.id) + "&staff=" + toUTF8(recip.id) + "&bypassAccessZoneCheck=" + (m_bypassAccessZoneCheck ? "1" : "0"));
+	
+	if (importData(retVal, "name") == "") {
+		removeRecip(recip);
+		return;
+	}
+
+	recip.innerText = importData(retVal, "name");
+	recip.id = importData(retVal, "name");
+	recip.className = "divRcpResCIn";
+	recip.setAttribute("name", "resolved");
+	recip.dbid = importData(retVal, "id");
+	recip.outerHTML = recip.outerHTML.replace(/unresolved/ig, "resolved");
+	
+	try {
+		this.msgTo.focus();
+	} catch (e) {}
+}
+
+function checkNames() {
+  standardizeInputCharacters(this.msgTo);
+	addRecipients(this.msgTo.value);
+	//objRecipient.onupdaterecipients = resolveAllRecipients;
+	f_CheckNames();
+}
+
+function updateRecipients(fireChecknames) {
+	var newHTML = "";
+	
+	for (var i=0; i<this.divResolvedRecipients.children.length; i++)
+		newHTML += this.divResolvedRecipients.children[i].outerHTML + " - ";
+	
+	if (newHTML.length > 3)
+		newHTML = newHTML.substr(0, newHTML.length - 3);
+		
+	this.divResolvedRecipients.innerHTML = newHTML;
+	
+	
+	adjustFieldHeight(this.divResolvedRecipients);
+	
+	if (fireChecknames)
+		__idExchangeMessageOnCheckNames.fire();
+}
+
+function adjustFieldHeight(oNode) {
+	if (!oNode.style)
+		return;
+
+	var oStyle = oNode.style;
+	oStyle.display = (oNode.innerHTML == "") ? "none" : "";
+	
+	if (oNode.scrollHeight < (2 * 13))
+		oStyle.posHeight = 13 + 5;
+	else
+		oStyle.posHeight = (2 * 13) + 5;
+}
+</script>
+
+<script>
+var m_direction = "ltr";
+function onDocumentReady() {
+	this.msgTo = txtReceivers;
+	this.divResolvedRecipients = divTo;
+	this.divMainContainer = divMain;
+	this.panicMode = "false";
+	
+	adjustFieldHeight(this.divResolvedRecipients);
+	
+	if (readonly == "1") {
+		this.msgTo.style.display = "none";
+		this.divResolvedRecipients.style.border = "0px";
+		this.divMainContainer.style.border = "0px";		
+	} else {
+		this.msgTo.style.paddingTop = "2px";
+		this.msgTo.style.paddingBottom = "2px";
+		this.divResolvedRecipients.style.borderBottom = "1px solid #A5ACB2";
+	}
+
+	element.insertAdjacentElement("afterbegin", this.document.body.firstChild);
+
+	if (recips)
+		f_getRecipsHTML(recips);
+}
+</script>
+
+<script>
+var m_xmlHTTP = new ActiveXObject("Microsoft.xmlHTTP");
+var m_fIsNewMessage = true;
+var m_szHTMLRecipients = "";
+
+this.sent = false;
+
+function NOOP() {return;}
+
+function get_unresolvedRecipients() {
+	try {
+		return this.divResolvedRecipients.all["unresolved"];
+	} catch (e) {
+		return null;
+	}
+}
+
+function get_resolvedRecipients() {
+	try {
+		return this.divResolvedRecipients.all["resolved"];
+	} catch (e) {
+		return null;
+	}
+}
+
+function f_AddRecipients(szRecipients) {
+	m_szRecipients = szRecipients;
+	this.msgTo.value = "";
+}
+
+function f_getRecipsHTML(idlist) {
+	getServerResponseAsync("Common", "GetRecipsHtml", "RecipType=" + m_type + "&BypassAccessZoneCheck=" + (m_bypassAccessZoneCheck ? "1" : "0"), mfGetDataFromResponseXML, idlist);
+}
+
+function f_getRecipsText() {
+	var retVal = "";
+	for (var i=0; i<this.divResolvedRecipients.children.length; i++)
+		retVal += this.divResolvedRecipients.children[i].innerHTML + " - ";
+
+	if (retVal.length > 1)
+		retVal = retVal.substr(0, retVal.length-3);
+
+	return retVal;
+}
+
+function f_getPersonalGroupHTML(id) {
+	var ret = getServerResponse("Common", "GetPersonalGroupHtml", "RecipType=" + m_type + "&BypassAccessZoneCheck=" + (m_bypassAccessZoneCheck ? "1" : "0"), id);
+	mfGetDataFromResponseXML(ret);
+}
+
+function f_CheckNames() {
+	if(m_szRecipients) {
+		var params = "";
+		if (!checknameControlId)
+			params = "isExternal=1";
+
+		if (params == "")
+			params = "BypassAccessZoneCheck=" + (m_bypassAccessZoneCheck ? "1" : "0");
+		else
+			params += "&BypassAccessZoneCheck=" + (m_bypassAccessZoneCheck ? "1" : "0");
+
+		getServerResponseAsync("Common", "CheckNames", params, mfGetDataFromResponseXML, m_szRecipients);
+	}
+}
+
+function mfGetDataFromResponseXML(szResponseText) {
+	if (szResponseText != "") {
+		var m_objHTML = window.document.createElement("div");
+		m_objHTML.innerHTML = szResponseText;
+		
+		var recipients = m_objHTML.all("recipTo");
+		if (recipients != null) {
+			var recipientsLength = recipients.children.length;
+			for (var i=0; i<recipientsLength; i++) {
+				var recip = element.divResolvedRecipients.appendChild(recipients.children[i].cloneNode(true));
+				
+				if (recipients.children[i].name.search(/unresolved/ig) != -1 && element.panicMode.toLowerCase()=="true")
+					f_checkName(recip);
+			}
+		}
+		
+		updateRecipients(true);
+	} else {
+		m_szHTMLRecipients = "";
+		this.sent = true;
+	}
+}	
+
+function getNextRecip(recip) {
+	if (!recip)
+		return null;
+
+	recip = recip.nextSibling;
+	try {
+		for (var i=0; i<3; i++) {
+			if (recip.tagName && recip.tagName.search(/a/i) != -1)
+				return recip;
+			else
+				recip = recip.nextSibling;
+		}
+		return null;
+	} catch (e) {
+		return null;
+	}
+}
+
+function getPreviousRecip(recip) {
+	if (!recip)
+		return null;
+
+	recip = recip.previousSibling;
+	try {
+		for (var i=0; i<3; i++) {
+			if (recip.tagName && recip.tagName.search(/a/i) != -1)
+				return recip;
+			else
+				recip = recip.previousSibling;
+		}
+		return null;
+	} catch (e) {
+		return null;
+	}
+}
+
+function findRecip(container, id, uniqueId) {
+	try {
+		var recip = container.all(id);
+		
+		if (recip.length) {
+			for (var i=0; i<recip.length; i++)
+				if (recip(i).uid == uniqueId)
+					return recip(i);
+		} else {
+			return recip;
+		}
+		
+		return null;
+	} catch (e) {
+		alert("error finding recipient");
+		return null;
+	}
+}
+
+function removeRecip(recip) {
+	if (recip != null) {
+		var focusingRecip = null;
+
+		focusingRecip = getPreviousRecip(recip);
+		if (!focusingRecip)
+			focusingRecip = getNextRecip(recip);
+		
+		var focusingRecipUID;
+		if (focusingRecip)
+			focusingRecipUID = focusingRecip.uid;
+			
+
+		if (recip != null) {
+			recip.removeNode(true);
+			updateRecipients(true);
+		}
+		
+		try {
+			selectRecip(findRecip(this.divResolvedRecipients, focusingRecip.id, focusingRecipUID));
+		} catch (e) {
+			try {
+				this.msgTo.focus();
+			} catch (e) {}
+		}
+	}
+}
+
+function f_getResolvedRecips(uniqueRecipients) {
+	var retVal = "";
+	var tempVal = "";
+	for (var i=0; i<this.divResolvedRecipients.children.length; i++) {
+	    tempVal = this.divResolvedRecipients.children[i].dbid;
+		if (uniqueRecipients) {
+		    if (isUniqueReceipt(retVal, tempVal))
+		        retVal += tempVal + ",";
+		} else {
+            retVal += tempVal + ",";
+		}
+    }
+    
+	if (retVal.length > 1)
+		retVal = retVal.substr(0, retVal.length-1);		
+
+	return retVal;
+}
+
+function isUniqueReceipt(recipientsString, value) {
+    recipientsString = "," + recipientsString + ",";
+    if (recipientsString.indexOf("," + value + ",")!=-1)
+        return false;
+    else
+        return true;
+}
+
+function f_focus() {
+	try {
+		this.msgTo.focus();
+	} catch (e) {}
+}
+</script>
+</html>

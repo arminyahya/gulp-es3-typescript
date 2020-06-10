@@ -2,12 +2,10 @@ import { createElement, withErrorHandling } from '../utils'
 
 const withLabel = (input: HTMLElement, title: string, currentDocument: any = window.document) => {
   const wrapper = createElement({
-    currentDocument: currentDocument,
     tagName: 'div',
     props: { className: 'with-label' },
   })
   const label = createElement<HTMLLabelElement>({
-    currentDocument: currentDocument,
     tagName: 'label',
     props: { className: 'with-label__label' },
   })
