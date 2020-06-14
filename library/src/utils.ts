@@ -59,7 +59,7 @@ interface createElementArgs<T> {
 }
 
 export const createElement = function <T = any>({ tagName, props, onMount }: createElementArgs<T>) {
-  const element = currentDocumentObj.getCurrentDocument().createElement(tagName) as HTMLElement
+  const element = window.document.createElement(tagName) as HTMLElement
   const idGenerator = elementIdGenerator
   for (const prop in props) {
     if (prop === 'style') {
@@ -67,6 +67,7 @@ export const createElement = function <T = any>({ tagName, props, onMount }: cre
         element.style[style as string] = props[prop][style]
       }
     } else {
+      console.log(prop)
       element[prop as any] = props[prop]
     }
   }
@@ -75,11 +76,9 @@ export const createElement = function <T = any>({ tagName, props, onMount }: cre
     if (!props || !props['id']) {
       element.id = idGenerator.gererate()
     }
-    $(currentDocumentObj.getCurrentDocument())
-      .find(element.id)
-      .ready(() => {
-        onMount()
-      })
+    $(element.id).ready(() => {
+      onMount()
+    })
   }
   return element
 }
@@ -124,4 +123,23 @@ export function dialogFormToJSON() {
   })
 
   return form
+}
+
+export function importModule(url: string) {
+  // const refinedUrl = appendPackageId(url)
+  const refinedUrl = url
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script')
+    script.src = refinedUrl
+    script.async = true
+    script.onload = () => {
+      resolve()
+      script.remove()
+    }
+    script.onerror = () => {
+      reject(new Error('Failed to load module script with URL ' + refinedUrl))
+      script.remove()
+    }
+    document.head.appendChild(script)
+  })
 }

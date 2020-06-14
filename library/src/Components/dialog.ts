@@ -10,8 +10,8 @@ interface Props {
   width?: number
 }
 
-const Modal = ({ htmlSrc, dialogArguments = {}, height = 250, width = 850 }: Props) => {
+const Dialog = ({ htmlSrc, dialogArguments = {}, height = 250, width = 850 }: Props) => {
   const modalOptions = `dialogHeight:${height}px;dialogWidth:${width}px`
   window.showModalDialog(htmlSrc, dialogArguments, modalOptions)
 }
-export default withErrorHandling<({ ...args }: Props) => void>(Modal, 'Modal')
+export default withErrorHandling<({ ...args }: Props) => void>(Dialog, 'Dialog')

@@ -7,12 +7,12 @@ import {
   currentDocumentObj,
 } from '../../utils'
 import { addNewRow, removeCell, settingCell } from './staticComponents'
-import { Modal, TableBaseOnRow } from '..'
 import dynamicDataForm from '../dynamicDataForm'
 import { mapIntoTD } from '../tableBaseOnRow'
+import DynamicDataModal from './dynamicDataModal'
 
 export interface TableCellType {
-  input: () => HTMLElement
+  input: HTMLElement
   cellProps?: Partial<Omit<HTMLTableDataCellElement, 'style'> & { style?: Partial<CSSStyleDeclaration> }>
 }
 
@@ -21,7 +21,7 @@ export const toTD = (data: TableCellType, currentDocument: any = window.document
     tagName: 'td',
     props: { ...data.cellProps },
   })
-  td.appendChild(data.input())
+  td.appendChild(data.input)
   // this work if document changed but not for event listeners
   // td.innerHTML = data.input.outerHTML
   return td
@@ -67,11 +67,10 @@ const DynamicDataGrid = ({
       toTD(removeCell(index, onRemove)),
       ...mapIntoTD(
         rowsData.fields.map((fieldData, fieldI) => ({
-          input: displayCellRenderer({
+          ...displayCellRenderer({
             ...fieldData,
             formData: formData[index][fieldData.name],
-          }).input,
-          cellProps: {},
+          }),
         }))
       ),
       toTD(settingCell(index, onSetting)),
@@ -102,9 +101,12 @@ const DynamicDataGrid = ({
       tr.appendChild(settingTd)
       document.getElementById(tableBodyId).insertBefore(tr, document.getElementById(tableBodyId).lastChild)
     }
-    const modal = Modal({
-      htmlSrc: './dynamic-data-modal.html',
-      dialogArguments: { fields: rowsData.fields, formData, editCellRenderer, onSubmit },
+
+    const modal = DynamicDataModal({
+      fields: rowsData.fields,
+      formData,
+      editCellRenderer,
+      onSubmit,
     })
     document.getElementById('root').appendChild(modal)
   }
@@ -119,19 +121,16 @@ const DynamicDataGrid = ({
   }
 
   function onSetting(index) {
-    const modal = Modal({
-      htmlSrc: './dynamic-data-modal.html',
-      dialogArguments: {
-        fields: rowsData.fields,
-        formData: formData[index],
-        editCellRenderer,
-        onSubmit: (d) => {
-          changeRowData(index, d)
-        },
+    const modal = DynamicDataModal({
+      fields: rowsData.fields,
+      formData: formData[index],
+      editCellRenderer,
+      onSubmit: (d) => {
+        changeRowData(index, d)
       },
     })
     if (modal) {
-      document.getElementById('root').appendChild(modal.cloneNode(true))
+      document.getElementById('root').appendChild(modal)
     }
   }
 
