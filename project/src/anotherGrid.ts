@@ -1,22 +1,21 @@
-export default function AnotherGrid(doc) {
-	const grid = {
+const AnotherGrid = {
 		headers: ["a"],
-		initialFormData: [
-			{
-				a: "Armin",
-			},
-		],
+		// initialFormData: [
+		// 	{
+		// 		a: "Armin",
+		// 	},
+		// ],
 		displayCellRenderer: function (d) {
 			return {
 				input: window.Didgah4DynamicDataLibrary.createElement({
 						tagName: "input",
-						props: { type: 'button', fieldName: d.name, onclick: () => { }}
+						props: { fieldName: d.name, onclick: () => { }}
 					})
 				,
 				cellProps: { colSpan: d.col },
 			};
 		},
-		editCellRenderer: function (d, doc) {
+		editCellRenderer: function (d) {
 			return {
 				input: window.Didgah4DynamicDataLibrary.createElement({
 						tagName: "input",
@@ -30,5 +29,5 @@ export default function AnotherGrid(doc) {
 			fields: [{ name: "a", col: 1, Type: { IsBundle: false } }],
 		},
 	};
-	return grid;
-}
+
+export default AnotherGrid;

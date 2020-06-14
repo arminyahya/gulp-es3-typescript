@@ -95,6 +95,7 @@ const DynamicDataGrid = ({
             formData: data[item],
           })
         )
+        console.log(mainTd)
         tr.appendChild(mainTd)
       }
       const settingTd = toTD(settingCell(formData.length - 1, onSetting))

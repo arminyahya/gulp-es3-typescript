@@ -1,31 +1,38 @@
 import * as $ from 'jquery'
-import { createElement, elementIdGenerator } from '../utils'
+import { createElement, elementIdGenerator, renderIntoRoot } from '../utils'
 
 export function removeElement(id: string) {
-  const element = document.getElementById(id)
-  element.style.display = 'none'
+  // const element = document.getElementById(id)
+  // element.style.display = 'none'
+  const node = document.getElementById(id)
+  if (node.parentNode) {
+    node.parentNode.removeChild(node)
+  }
 }
 
 export default function SimpleModal() {
   const modalId = elementIdGenerator.gererate()
+  const overlayId = elementIdGenerator.gererate()
+  const lastModal = $('.simple-modal')
+  const overlay = createElement({ tagName: 'div', props: { id: overlayId, className: 'simple-modal__overlay' } })
+  if (lastModal.length === 0) {
+    document.getElementById('root').appendChild(overlay)
+  } else {
+    lastModal.after(overlay)
+  }
+
   function onClose() {
     removeElement(modalId)
+    removeElement(overlayId)
   }
   const leftPosition = (window.screen.width * 0.5 - 600 / 2).toString() + 'px'
   const wrap = createElement({
     tagName: 'div',
-    props: { id: modalId, className: 'simple-modal' },
-    onMount: () => {
-      const root = document.getElementById('root')
-
-      // if (!root.className.split(' ').find((className) => className === 'modal-is-open')) {
-      //   root.className += ' modal-is-open'
-      // }
-    },
+    props: { id: modalId, className: 'simple-modal', style: { left: leftPosition } },
   })
   const inner = createElement({
     tagName: 'div',
-    props: { className: 'simple-modal__inner', style: { left: leftPosition } },
+    props: { className: 'simple-modal__inner' },
   })
   const close = createElement({
     tagName: 'input',
@@ -35,5 +42,5 @@ export default function SimpleModal() {
   const content = createElement({ tagName: 'div', props: { className: 'simple-modal__content' } })
   inner.appendChild(content)
   wrap.appendChild(inner)
-  return wrap
+  return { modal: wrap, onClose: onClose }
 }

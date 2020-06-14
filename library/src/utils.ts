@@ -41,8 +41,8 @@ export const getElementWithClassNames = (element: HTMLElement, classNames: strin
 export const elementIdGenerator = {
   busyIds: [],
   gererate: function () {
-    const id = Math.random() * 10
-    if ($(`#${id}`).length === 0 && !this.busyIds.find((item) => item === id)) {
+    const id = Math.random().toString(36).substr(2, 9);
+    if (document.querySelectorAll(`#${id}`).length === 0 && !this.busyIds.find((item) => item === id)) {
       this.busyIds.push(id)
       return id.toString()
     } else {
@@ -67,7 +67,6 @@ export const createElement = function <T = any>({ tagName, props, onMount }: cre
         element.style[style as string] = props[prop][style]
       }
     } else {
-      console.log(prop)
       element[prop as any] = props[prop]
     }
   }
@@ -95,18 +94,10 @@ export const withErrorHandling = <T extends (...args: any[]) => any>(component: 
 
 export function formToJSON(selector) {
   const form = {}
-  $(selector)
-    .find('input')
-    .each(function () {
-      const self = $(this)
-      const name = self.attr('fieldName')
-      if (form[name]) {
-        form[name] = form[name] + ',' + self.val()
-      } else {
-        form[name] = self.val()
-      }
-    })
-
+  document.querySelectorAll(selector + ' input').forEach(function (el) {
+    const name = el.getAttribute('fieldName')
+    form[name] = el.getAttribute('value')
+  })
   return form
 }
 

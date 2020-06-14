@@ -60,7 +60,8 @@ th {
 
 .dynamic-table__row__remove-button,
 .dynamic-table__row__add-button {
-  background-color: #ccc;
+  background-color: #2196F3;
+  color: #ffffff;
   width: 20px;
   height: 20px;
   border-radius: 10px;
@@ -72,15 +73,12 @@ th {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 100%;
-  height: 100%;
-  background-color: #aaaaaa;
+  width: 600px;
+  background-color: #ffffff;
 }
 
 .simple-modal_inner {
   position: absolute;
-  width: 400px;
-  height: 400px;
   top: 50px;
   background-color: #ffffff;
   border: 1px solid #ccc;
@@ -90,9 +88,38 @@ th {
   position: absolute;
   top: 0;
   right: 0;
-  height: 20px
+  height: 20px;
+  background-color: #616161;
+  color: #ffffff;
+  border: none;
+  outline: none;
 }
 
 .simple-modal__content {
   margin-top: 20px;
+}
+
+.simple-modal__overlay {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  background-color: whitesmoke;
+  filter: alpha(opacity=90);
+}
+
+.center {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.submit-button {
+  background-color: #4CAF50;
+  color: #ffffff;
+  border: none;
+  outline: none;
+  width: 150px;
+  margin: 10px auto;
 }
