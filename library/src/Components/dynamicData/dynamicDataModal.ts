@@ -11,10 +11,10 @@ interface Props {
 }
 
 export default function DynamicDataModal({ fields, formData, editCellRenderer, onSubmit }: Props) {
+  console.log(onSubmit)
   const { modal, onClose } = SimpleModal()
   const formId = elementIdGenerator.gererate()
   const form = createElement({ tagName: 'form', props: { id: formId } })
-  const bundleFields = fields.filter((field) => field.Type.IsBundle === true).map((field) => field.name)
   fields.map(function (field) {
     const wrap = createElement({ tagName: 'div' })
     field.formData = formData[field.name]
@@ -23,7 +23,8 @@ export default function DynamicDataModal({ fields, formData, editCellRenderer, o
         editCellRenderer({
           ...field,
           onUpdateFormData: (d) => {
-            formData[field.name] = d
+            console.log(d)
+            if (field.name) formData[field.name] = d
           },
         }).input
       )
@@ -34,18 +35,15 @@ export default function DynamicDataModal({ fields, formData, editCellRenderer, o
   })
   modal.appendChild(form)
   const buttonWrap = createElement({ tagName: 'div', props: { className: 'center' } })
-
   const button = createElement({
     tagName: 'input',
     props: {
       type: 'submit',
       className: 'submit-button',
       onclick: function (e) {
-        console.log(formData);
-        console.log(bundleFields.map((field) => formData[field.name]))
-        console.log({ ...bundleFields.map((field) => formData[field.name]), ...formToJSON(`#${formId}`) })
+        console.log({ ...formData[0], ...formToJSON(`#${formId}`) })
         onSubmit(formToJSON(`#${formId}`))
-        onClose()
+        // onClose()
       },
     },
   })

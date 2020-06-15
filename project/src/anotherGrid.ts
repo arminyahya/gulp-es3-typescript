@@ -3,10 +3,10 @@ import * as libraryName from "gulp-es3-typescript-library";
 // @ts-ignore
 const lib:any = libraryName.lib;
 const AnotherGrid = {
-		headers: ["field 0"],
+		headers: ["field0"],
 		// initialFormData: [
 		// 	{
-		// 		field 0: "Armin",
+		// 		field0: "Armin",
 		// 	},
 		// ],
 		displayCellRenderer: function (d) {
@@ -30,7 +30,7 @@ const AnotherGrid = {
 			};
 		},
 		rowsData: {
-			fields: [{ name: "field 0", col: 1, Type: { IsBundle: false } }],
+			fields: [{ name: "field0", col: 1, Type: { IsBundle: false } }],
 		},
 	};
 

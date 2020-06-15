@@ -41,7 +41,7 @@ export const getElementWithClassNames = (element: HTMLElement, classNames: strin
 export const elementIdGenerator = {
   busyIds: [],
   gererate: function () {
-    const id = Math.random().toString(36).substr(2, 9);
+    const id = Math.random().toString(36).substr(2, 9)
     if (document.querySelectorAll(`#${id}`).length === 0 && !this.busyIds.find((item) => item === id)) {
       this.busyIds.push(id)
       return id.toString()
@@ -96,7 +96,9 @@ export function formToJSON(selector) {
   const form = {}
   document.querySelectorAll(selector + ' input').forEach(function (el) {
     const name = el.getAttribute('fieldName')
-    form[name] = el.getAttribute('value')
+    if (name) {
+      form[name] = el.getAttribute('value')
+    }
   })
   return form
 }

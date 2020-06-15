@@ -14,7 +14,6 @@ const grid = lib.DynamicDataGrid({
 	headers: ["countryname", "date", "gridField"],
 	initialFormData,
 	displayCellRenderer: function (d) {
-		console.log(d.name, d.col)
 		return {
 			input: lib.createElement({
 				tagName: "span",
@@ -49,6 +48,9 @@ const grid = lib.DynamicDataGrid({
 				input: lib.withLabel(
 					lib.createElement({
 						tagName: "input",
+						props: {
+							fieldName: d.name
+						}
 					}),
 					d.name
 				),
