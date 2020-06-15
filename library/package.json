@@ -1,7 +1,8 @@
 {
-  "name": "gulp-es3-typescript",
+  "name": "gulp-es3-typescript-library",
   "version": "1.0.0",
   "description": "",
+  "main": "dist/index.js",
   "scripts": {
     "start": "gulp --gulpfile tasks",
     "build:dev": "./node_modules/.bin/webpack --config ./webpack.config.js",

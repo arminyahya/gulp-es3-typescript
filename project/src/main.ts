@@ -1,23 +1,25 @@
+import * as libraryName from "gulp-es3-typescript-library";
 import AnotherGrid from "./anotherGrid";
-const library = window.Didgah4DynamicDataLibrary;
-
+// const library = window.Didgah4DynamicDataLibrary;
+// @ts-ignore
+const lib:any = libraryName.lib;
 const initialFormData = [
 	{
 		countryname: "netherlands",
 		countrycode: "",
-		grid1: [{ a: "Armin" }],
+		gridField: [{ a: "Armin" }],
 	},
 ];
-const grid = library.DynamicDataGrid({
-	currentDocument: window.document,
-	headers: ["countryname", "date", "grid1"],
+const grid = lib.DynamicDataGrid({
+	headers: ["countryname", "date", "gridField"],
 	initialFormData,
 	displayCellRenderer: function (d) {
+		console.log(d.name, d.col)
 		return {
-			input: library.createElement({
+			input: lib.createElement({
 				tagName: "span",
 				props: {
-					id: d.name === "grid1" ? "from-date-datePicker" : "",
+					id: d.name === "date" ? "from-date-datePicker" : "",
 					style: { width: "240px" },
 				},
 				onMount: function () {
@@ -36,7 +38,7 @@ const grid = library.DynamicDataGrid({
 	editCellRenderer: function (d) {
 		if (d.Type.IsBundle) {
 			return {
-				input: library.DynamicDataGrid({
+				input: lib.DynamicDataGrid({
 					...AnotherGrid,
 					onUpdateFormData: d.onUpdateFormData,
 				}),
@@ -44,8 +46,8 @@ const grid = library.DynamicDataGrid({
 			};
 		} else {
 			return {
-				input: library.withLabel(
-					library.createElement({
+				input: lib.withLabel(
+					lib.createElement({
 						tagName: "input",
 					}),
 					d.name
@@ -58,7 +60,7 @@ const grid = library.DynamicDataGrid({
 		fields: [
 			{ name: "countryname", col: 1, Type: { IsBundle: false } },
 			{ name: "date", col: 3, Type: { IsBundle: false } },
-			{ name: "grid1", col: 1, Type: { IsBundle: true } },
+			{ name: "gridField", col: 1, Type: { IsBundle: true } },
 		],
 	},
 });

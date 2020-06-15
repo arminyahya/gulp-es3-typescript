@@ -9,6 +9,14 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "declaration": true,
-    "lib": ["es2016", "DOM"]
-  }
+    "lib": ["es2016", "DOM"],
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist",
+  ]
 }

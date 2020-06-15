@@ -1,13 +1,17 @@
+import * as libraryName from "gulp-es3-typescript-library";
+// const library = window.Didgah4DynamicDataLibrary;
+// @ts-ignore
+const lib:any = libraryName.lib;
 const AnotherGrid = {
-		headers: ["a"],
+		headers: ["field 0"],
 		// initialFormData: [
 		// 	{
-		// 		a: "Armin",
+		// 		field 0: "Armin",
 		// 	},
 		// ],
 		displayCellRenderer: function (d) {
 			return {
-				input: window.Didgah4DynamicDataLibrary.createElement({
+				input: lib.createElement({
 						tagName: "input",
 						props: { fieldName: d.name, onclick: () => { }}
 					})
@@ -17,7 +21,7 @@ const AnotherGrid = {
 		},
 		editCellRenderer: function (d) {
 			return {
-				input: window.Didgah4DynamicDataLibrary.createElement({
+				input: lib.createElement({
 						tagName: "input",
 						props: { value: d.formData || "", fieldName: d.name },
 					})
@@ -26,7 +30,7 @@ const AnotherGrid = {
 			};
 		},
 		rowsData: {
-			fields: [{ name: "a", col: 1, Type: { IsBundle: false } }],
+			fields: [{ name: "field 0", col: 1, Type: { IsBundle: false } }],
 		},
 	};
 

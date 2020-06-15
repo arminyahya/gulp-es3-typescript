@@ -3,7 +3,7 @@ var ES3Plugin = require('webpack-es3-plugin')
 const MinifyPlugin = require('babel-minify-webpack-plugin')
 
 module.exports = {
-  entry: ['./src/main.ts'],
+  entry: ['./src/index.ts'],
   devtool: 'source-map', // use 'eval-cheap-source-map' for chrome
   mode: 'development',
   module: {
@@ -19,7 +19,16 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', { loose: true, modules: 'commonjs' }],
+            presets: [
+              [
+                '@babel/preset-env',
+                // {
+                //   targets: {
+                //     ie: '5',
+                //   },
+                // },
+              ],
+            ],
             plugins: ['babel-plugin-transform-class-properties'],
           },
         },
@@ -59,7 +68,9 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
-    filename: 'bundle.js',
+    filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
+    library: 'lib',
+    libraryTarget: 'commonjs',
   },
 }

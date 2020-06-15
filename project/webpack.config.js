@@ -19,10 +19,15 @@ module.exports = {
 				use: {
 					loader: "babel-loader",
 					options: {
-						presets: [
-							"@babel/preset-env",
-							{ loose: true, modules: "commonjs" },
-						],
+            presets: [
+              ['@babel/preset-env',
+              // {
+              //   targets: {
+              //     ie: '5',
+              //   },
+							// }
+						]
+            ],
 						plugins: ["babel-plugin-transform-class-properties"],
 					},
 				},
@@ -66,3 +71,4 @@ module.exports = {
 		path: path.resolve(__dirname, "dist"),
 	},
 };
+

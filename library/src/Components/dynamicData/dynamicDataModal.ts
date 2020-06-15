@@ -44,9 +44,8 @@ export default function DynamicDataModal({ fields, formData, editCellRenderer, o
         console.log(formData);
         console.log(bundleFields.map((field) => formData[field.name]))
         console.log({ ...bundleFields.map((field) => formData[field.name]), ...formToJSON(`#${formId}`) })
-
-        // onSubmit(formToJSON(`#${formId}`))
-        // onClose()
+        onSubmit(formToJSON(`#${formId}`))
+        onClose()
       },
     },
   })

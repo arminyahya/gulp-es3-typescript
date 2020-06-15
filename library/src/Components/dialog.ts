@@ -12,6 +12,7 @@ interface Props {
 
 const Dialog = ({ htmlSrc, dialogArguments = {}, height = 250, width = 850 }: Props) => {
   const modalOptions = `dialogHeight:${height}px;dialogWidth:${width}px`
+  // @ts-ignore
   window.showModalDialog(htmlSrc, dialogArguments, modalOptions)
 }
 export default withErrorHandling<({ ...args }: Props) => void>(Dialog, 'Dialog')

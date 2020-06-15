@@ -11,6 +11,13 @@
     "lib": [
       "es2016",
       "DOM"
-    ]
+    ],
+    "baseUrl": ".",
+      "paths": {
+      "gulp-es3-typescript-library": ["node_modules/gulp-es3-typescript-library"],
   }
+},
+"include": [
+  "src"
+]
 }
