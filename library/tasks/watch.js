@@ -9,8 +9,11 @@ function watch() {
   gulp.watch('src/**/*.ts').on(
     'change',
     debounce(() => {
-      npm.load(() => npm.run('build:production'))
-    }, 500),
+      npm.load(() => {
+        npm.run('build:production')
+        npm.run('build:project')
+      })
+    }, 1000)
   )
 }
 

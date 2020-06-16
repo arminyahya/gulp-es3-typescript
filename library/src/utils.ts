@@ -56,9 +56,10 @@ interface createElementArgs<T> {
   // override default style type
   props?: Partial<Omit<T, 'style'> & { style?: Partial<CSSStyleDeclaration> }>
   onMount?: () => void
+  innerText?: string
 }
 
-export const createElement = function <T = any>({ tagName, props, onMount }: createElementArgs<T>) {
+export const createElement = function <T = any>({ tagName, props, onMount, innerText }: createElementArgs<T>) {
   const element = window.document.createElement(tagName) as HTMLElement
   const idGenerator = elementIdGenerator
   for (const prop in props) {
@@ -78,6 +79,10 @@ export const createElement = function <T = any>({ tagName, props, onMount }: cre
     $(element.id).ready(() => {
       onMount()
     })
+  }
+
+  if (innerText) {
+    element.innerText = innerText
   }
   return element
 }

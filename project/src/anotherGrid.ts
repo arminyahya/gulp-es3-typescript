@@ -1,7 +1,5 @@
-import * as libraryName from "gulp-es3-typescript-library";
-// const library = window.Didgah4DynamicDataLibrary;
-// @ts-ignore
-const lib:any = libraryName.lib;
+import * as lib from "gulp-es3-typescript-library";
+
 const AnotherGrid = {
 		headers: ["field0"],
 		// initialFormData: [
@@ -13,9 +11,9 @@ const AnotherGrid = {
 			return {
 				input: lib.createElement({
 						tagName: "input",
-						props: { fieldName: d.name, onclick: () => { }}
-					})
-				,
+						props: { onclick: () => { }, value: d.formData, disabled: true},
+						innerText: d.Type.IsBundle ? '#' : d.formData
+					}),
 				cellProps: { colSpan: d.col },
 			};
 		},

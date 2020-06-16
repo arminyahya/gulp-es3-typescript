@@ -1,17 +1,16 @@
 import { TableCellType } from './gride'
 import SimpleModal, { removeElement } from '../simple-modal'
 import { elementIdGenerator, createElement, dialogFormToJSON, formToJSON } from '../../utils'
-import DynamicDataGrid from './gride'
 
 interface Props {
+  mode: 'add' | 'edit'
   fields: any[]
   formData: any
   editCellRenderer: (d) => TableCellType
   onSubmit: (d) => void
 }
 
-export default function DynamicDataModal({ fields, formData, editCellRenderer, onSubmit }: Props) {
-  console.log(onSubmit)
+export default function DynamicDataModal({ mode, fields, formData = {}, editCellRenderer, onSubmit }: Props) {
   const { modal, onClose } = SimpleModal()
   const formId = elementIdGenerator.gererate()
   const form = createElement({ tagName: 'form', props: { id: formId } })
@@ -22,8 +21,8 @@ export default function DynamicDataModal({ fields, formData, editCellRenderer, o
       wrap.appendChild(
         editCellRenderer({
           ...field,
+          initialFormData: Object.keys(formData).length > 0 ? formData[field.name] : [],
           onUpdateFormData: (d) => {
-            console.log(d)
             if (field.name) formData[field.name] = d
           },
         }).input
@@ -41,9 +40,8 @@ export default function DynamicDataModal({ fields, formData, editCellRenderer, o
       type: 'submit',
       className: 'submit-button',
       onclick: function (e) {
-        console.log({ ...formData[0], ...formToJSON(`#${formId}`) })
-        onSubmit(formToJSON(`#${formId}`))
-        // onClose()
+        onSubmit({ ...formData, ...formToJSON(`#${formId}`) })
+        onClose()
       },
     },
   })

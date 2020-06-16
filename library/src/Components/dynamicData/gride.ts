@@ -80,6 +80,7 @@ const DynamicDataGrid = ({
   function onAdd() {
     const onSubmit = function (data) {
       formData.push(data)
+      console.log(formData)
       if (onUpdateFormData) {
         onUpdateFormData(formData)
       }
@@ -103,8 +104,9 @@ const DynamicDataGrid = ({
     }
 
     const modal = DynamicDataModal({
+      mode: 'add',
       fields: rowsData.fields,
-      formData,
+      formData: {},
       editCellRenderer,
       onSubmit,
     })
@@ -122,10 +124,12 @@ const DynamicDataGrid = ({
 
   function onSetting(index) {
     const modal = DynamicDataModal({
+      mode: 'edit',
       fields: rowsData.fields,
       formData: formData[index],
       editCellRenderer,
       onSubmit: (d) => {
+        console.log(d)
         changeRowData(index, d)
       },
     })

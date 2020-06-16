@@ -71,6 +71,7 @@ module.exports = {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
     library: 'lib',
-    libraryTarget: 'commonjs',
+    libraryTarget: 'umd',
+    umdNamedDefine: true,
   },
 }

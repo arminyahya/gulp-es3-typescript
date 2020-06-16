@@ -1,35 +1,21 @@
-import * as libraryName from "gulp-es3-typescript-library";
+import * as lib from "gulp-es3-typescript-library";
 import AnotherGrid from "./anotherGrid";
-// const library = window.Didgah4DynamicDataLibrary;
-// @ts-ignore
-const lib:any = libraryName.lib;
 const initialFormData = [
 	{
 		countryname: "netherlands",
 		countrycode: "",
-		gridField: [{ a: "Armin" }],
+		gridField: [{ field0: "Armin" }],
 	},
 ];
 const grid = lib.DynamicDataGrid({
-	headers: ["countryname", "date", "gridField"],
+	headers: ["countryname", "countrycode", "gridField"],
 	initialFormData,
 	displayCellRenderer: function (d) {
 		return {
 			input: lib.createElement({
 				tagName: "span",
-				props: {
-					id: d.name === "date" ? "from-date-datePicker" : "",
-					style: { width: "240px" },
-				},
-				onMount: function () {
-					window.document.getElementById(
-						"from-date-datePicker"
-					).innerHTML = `<input type='text' style='display:none;' id='txt123456' name="${
-						d.name || ""
-					}" value="${
-						d.value || ""
-					}" /><ccc:datePicker showTime='true' forceShowTime='true'/>`;
-				},
+				props: {},
+				innerText: d.Type.IsBundle ? '#' : d.formData
 			}),
 			cellProps: { colSpan: d.col },
 		};
@@ -38,8 +24,9 @@ const grid = lib.DynamicDataGrid({
 		if (d.Type.IsBundle) {
 			return {
 				input: lib.DynamicDataGrid({
+				// initialFormData:initialFormData[0].gridField,
 					...AnotherGrid,
-					onUpdateFormData: d.onUpdateFormData,
+					...d
 				}),
 				cellProps: { colSpan: d.col },
 			};
@@ -49,7 +36,8 @@ const grid = lib.DynamicDataGrid({
 					lib.createElement({
 						tagName: "input",
 						props: {
-							fieldName: d.name
+							fieldName: d.name,
+							value: d.formData || ''
 						}
 					}),
 					d.name
@@ -61,7 +49,7 @@ const grid = lib.DynamicDataGrid({
 	rowsData: {
 		fields: [
 			{ name: "countryname", col: 1, Type: { IsBundle: false } },
-			{ name: "date", col: 3, Type: { IsBundle: false } },
+			{ name: "countrycode", col: 3, Type: { IsBundle: false } },
 			{ name: "gridField", col: 1, Type: { IsBundle: true } },
 		],
 	},
