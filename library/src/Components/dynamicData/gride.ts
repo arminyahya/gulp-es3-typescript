@@ -58,7 +58,7 @@ const DynamicDataGrid = ({
       ...formData.map((row, i) => ({
         renderer: getRowElements(i),
       })),
-      ...[addNewRow(onAdd)],
+      ...[{ renderer: [toTD(addNewRow(onAdd))] }],
     ]
   }
 
@@ -80,11 +80,10 @@ const DynamicDataGrid = ({
   function onAdd() {
     const onSubmit = function (data) {
       formData.push(data)
-      console.log(formData)
       if (onUpdateFormData) {
         onUpdateFormData(formData)
       }
-      const tr = createElement({ tagName: 'tr', props: {} })
+      const tr = createElement({ tagName: 'tr', props: { className: 'listRowNormal' } })
       const removeTd = toTD(removeCell(formData.length - 1, onRemove))
       tr.appendChild(removeTd)
       for (const item in data) {
@@ -161,16 +160,23 @@ const DynamicDataGrid = ({
     const tableHead = createElement({ tagName: 'thead' })
     const tableheadrow = createElement({ tagName: 'tr' })
     const tableBody = createElement({ tagName: 'tbody', props: { id: tableBodyId } })
-    tableheadrow.appendChild(createElement({ tagName: 'th' }))
-    for (const header of headers) {
-      const th = createElement({ tagName: 'th' })
+    tableheadrow.appendChild(createElement({ tagName: 'th', props: { className: 'tableFloatingHeader' } }))
+    headers.forEach((header, index) => {
+      let rowSpan = 1
+      let colSpan = 1
+      try {
+        rowSpan = 1
+        colSpan = rowsData.fields[index].col
+      } catch {}
+      const th = createElement({ tagName: 'th', props: { className: 'tableFloatingHeader', rowSpan, colSpan } })
       th.innerHTML = header
       tableheadrow.appendChild(th)
-    }
+    })
+    tableheadrow.appendChild(createElement({ tagName: 'th', props: { className: 'tableFloatingHeader' } }))
 
     /* add table data */
     for (const row of displayRows) {
-      const tr = createElement({ tagName: 'tr', props: {} })
+      const tr = createElement({ tagName: 'tr', props: { className: 'listRowNormal' } })
       for (const td of row.renderer) {
         tr.appendChild(td)
       }

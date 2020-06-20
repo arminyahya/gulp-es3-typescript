@@ -18,14 +18,17 @@ select {
 
 table {
   width: 100%;
-  height: 100%;
   padding: 0px;
   margin: 0px;
-  table-layout: fixed;
+  /* table-layout: fixed; */
 }
 
 th {
   text-align: right;
+}
+
+th, tr, td {
+  line-height: 18px  
 }
 
 .auto-complete {
@@ -58,6 +61,10 @@ th {
   text-align: right;
 }
 
+.table-base-row th div,.table-base-row td div {
+  height: 25px
+}
+
 .dynamic-table__row__remove-button,
 .dynamic-table__row__add-button {
   background-color: #2196F3;
@@ -75,6 +82,7 @@ th {
   top: 0px;
   width: 600px;
   background-color: #ffffff;
+  z-index: 20;
 }
 
 .simple-modal_inner {
@@ -107,13 +115,12 @@ th {
   height: 100%;
   background-color: whitesmoke;
   filter: alpha(opacity=90);
+  z-index: 20;
 }
 
-.center {
-  display: table-cell;
+ .center {
   vertical-align: middle;
-  text-align: center;
-}
+} 
 
 .submit-button {
   background-color: #4CAF50;
@@ -122,4 +129,8 @@ th {
   outline: none;
   width: 150px;
   margin: 10px auto;
+}
+
+.text-center {
+  text-align: center;
 }

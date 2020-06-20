@@ -17,6 +17,9 @@ export default function DynamicDataModal({ mode, fields, formData = {}, editCell
   fields.map(function (field) {
     const wrap = createElement({ tagName: 'div' })
     field.formData = formData[field.name]
+    if (mode === 'add') {
+      formData[field.name] = field.Type.IsBundle ? [] : null
+    }
     if (field.Type.IsBundle) {
       wrap.appendChild(
         editCellRenderer({
@@ -38,9 +41,13 @@ export default function DynamicDataModal({ mode, fields, formData = {}, editCell
     tagName: 'input',
     props: {
       type: 'submit',
-      className: 'submit-button',
+      className: 'buttonHighlighted',
       onclick: function (e) {
-        onSubmit({ ...formData, ...formToJSON(`#${formId}`) })
+        const submitData = formToJSON(`#${formId}`)
+        for (const field in submitData) {
+          formData[field] = submitData[field]
+        }
+        onSubmit({ ...formData })
         onClose()
       },
     },
