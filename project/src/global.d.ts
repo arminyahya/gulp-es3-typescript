@@ -1,0 +1,1 @@
+/// <reference path="../../library/src/global.d.ts" />

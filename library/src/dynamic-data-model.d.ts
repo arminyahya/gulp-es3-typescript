@@ -96,3 +96,43 @@ declare module DynamicDataModel {
     Bundle = 3,
   }
 }
+
+declare module ExtraModel {
+  interface Component extends ExtraModel.Control {
+    Code: string
+    DataIndex: string
+    Label: string
+    Required: boolean
+    Rules?: any[]
+    SoftwareGuid: System.Guid
+  }
+  interface Container extends ExtraModel.Control {
+    Children: ExtraModel.IControl[]
+    Code: string
+    Identifier: string
+  }
+  interface Control {
+    Attributes?: any
+    Type: ExtraModel.ControlType
+  }
+  interface FileModel {
+    Extension: string
+    FileName: string
+    FileType: number
+    ID: string
+    Size: number
+  }
+  interface GridColumn extends ExtraModel.Component {
+    Width: string
+  }
+  interface SearchModel {
+    CompareOptions: ExtraModel.PairValue<number>[]
+    Field: ExtraModel.PairValue<string>
+    ValueComponent: ExtraModel.IComponent
+  }
+}
+declare module ExtraModel.Containers {
+  interface FieldsetAttribute {
+    Title: string
+  }
+}

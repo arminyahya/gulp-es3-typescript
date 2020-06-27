@@ -5,11 +5,14 @@ import {
   withErrorHandling,
   elementIdGenerator,
   currentDocumentObj,
-} from '../../utils'
-import { addNewRow, removeCell, settingCell } from './staticComponents'
-import dynamicDataForm from '../dynamicDataForm'
-import { mapIntoTD } from '../tableBaseOnRow'
-import DynamicDataModal from './dynamicDataModal'
+} from '../../../utils'
+import { addNewRow, removeCell, settingCell, gridRowElement } from '../staticComponents'
+import dynamicDataForm from '../../dynamicDataForm'
+import { mapIntoTD } from '../../tableBaseOnRow'
+import DynamicDataModal from '../dynamicDataModal'
+import DidgahDeferred from '../../../DidgahDeferred'
+import { createAjaxReq } from '../../../ajax'
+import { InitAjaxAttributes } from '../../select'
 
 export interface TableCellType {
   input: HTMLElement
@@ -39,7 +42,6 @@ interface Props {
   initialFormData?: any[]
   onUpdateFormData?: (d) => void
 }
-
 const DynamicDataGrid = ({
   headers = [],
   displayCellRenderer,
@@ -52,7 +54,6 @@ const DynamicDataGrid = ({
   const tableBodyId = elementIdGenerator.gererate()
   const formData = [...initialFormData]
   const displayRows: TableRow[] = getDisplayRows()
-
   function getDisplayRows() {
     return [
       ...formData.map((row, i) => ({
@@ -83,7 +84,7 @@ const DynamicDataGrid = ({
       if (onUpdateFormData) {
         onUpdateFormData(formData)
       }
-      const tr = createElement({ tagName: 'tr', props: { className: 'listRowNormal' } })
+      const tr = gridRowElement()
       const removeTd = toTD(removeCell(formData.length - 1, onRemove))
       tr.appendChild(removeTd)
       for (const item in data) {
@@ -143,7 +144,7 @@ const DynamicDataGrid = ({
       onUpdateFormData(formData)
     }
     const tableBody = document.getElementById(tableBodyId)
-    const tr = createElement({ tagName: 'tr' })
+    const tr = gridRowElement()
     for (const td of getRowElements(index)) {
       tr.appendChild(td)
     }
@@ -173,10 +174,9 @@ const DynamicDataGrid = ({
       tableheadrow.appendChild(th)
     })
     tableheadrow.appendChild(createElement({ tagName: 'th', props: { className: 'tableFloatingHeader' } }))
-
     /* add table data */
     for (const row of displayRows) {
-      const tr = createElement({ tagName: 'tr', props: { className: 'listRowNormal' } })
+      const tr = gridRowElement()
       for (const td of row.renderer) {
         tr.appendChild(td)
       }
@@ -191,4 +191,25 @@ const DynamicDataGrid = ({
   return firstRender()
 }
 
-export default withErrorHandling<({ ...args }: Props) => void>(DynamicDataGrid, 'DynamicData/Grid')
+function onInit(url: string, attributes: InitAjaxAttributes) {
+  const { EntityId, ReferenceFieldId } = attributes
+  const dfd = DidgahDeferred.create<any>()
+  createAjaxReq(url, 'post', {
+    EntityId: EntityId,
+    ReferenceFieldId: ReferenceFieldId,
+  }).done((result: Array<{ key; value }>) => {
+    const dataSource = result.map((item) => {
+      return { value: item.key, label: item.value || '' }
+    })
+    dfd.resolve(dataSource)
+  })
+  return dfd.promise()
+}
+
+export default withErrorHandling<({ ...args }: Props) => void>(
+  {
+    component: DynamicDataGrid,
+    onInit: onInit,
+  },
+  'DynamicData/Grid'
+)

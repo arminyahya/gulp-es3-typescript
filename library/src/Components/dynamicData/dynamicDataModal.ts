@@ -1,6 +1,7 @@
-import { TableCellType } from './gride'
+import { TableCellType } from './Edit/gride'
 import SimpleModal, { removeElement } from '../simple-modal'
 import { elementIdGenerator, createElement, dialogFormToJSON, formToJSON } from '../../utils'
+import DynamicDataGrid from './Edit/gride'
 
 interface Props {
   mode: 'add' | 'edit'
@@ -22,13 +23,13 @@ export default function DynamicDataModal({ mode, fields, formData = {}, editCell
     }
     if (field.Type.IsBundle) {
       wrap.appendChild(
-        editCellRenderer({
-          ...field,
+        DynamicDataGrid({
+          ...field.bundleInfo,
           initialFormData: Object.keys(formData).length > 0 ? formData[field.name] : [],
           onUpdateFormData: (d) => {
             if (field.name) formData[field.name] = d
           },
-        }).input
+        })
       )
     } else {
       wrap.appendChild(editCellRenderer(field).input)

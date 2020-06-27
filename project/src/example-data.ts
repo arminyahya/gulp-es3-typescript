@@ -1,5 +1,4 @@
-const data = [
-  {
+const exampleDataStructure = {
     DataModelId: 'F8PJGtUTatTBvGwIlDZTGg',
     Layoutkey: 'testBase2-DidgahWeb',
     DesigendForm: [
@@ -1317,5 +1316,6 @@ const data = [
         ],
       },
     },
-  },
-]
+  };
+
+export default exampleDataStructure;

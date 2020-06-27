@@ -9,10 +9,11 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "declaration": true,
+    "skipLibCheck": true,
     "lib": ["es2016", "DOM"],
   },
   "include": [
-    "src"
+    "src", "../project/src/example-data.ts"
   ],
   "exclude": [
     "node_modules",

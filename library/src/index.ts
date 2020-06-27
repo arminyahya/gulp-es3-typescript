@@ -1,5 +1,5 @@
 import * as $ from 'jquery'
-import DynamicDataGrid from './Components/dynamicData/gride'
+import DynamicDataGrid from './Components/dynamicData/Edit/gride'
 export {
   createElement,
   renderIntoRoot,
@@ -10,8 +10,5 @@ export {
 } from './utils'
 import { withLabel } from './Components'
 import { mapIntoTD } from './Components/tableBaseOnRow'
-export {
-  withLabel,
-  mapIntoTD,
-  DynamicDataGrid,
-}
+export { createApiUrl } from './ajax'
+export { withLabel, mapIntoTD, DynamicDataGrid }

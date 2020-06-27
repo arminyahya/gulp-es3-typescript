@@ -63,3 +63,7 @@ export function wrapDiv(element: any) {
   wrapper.appendChild(element)
   return wrapper
 }
+
+export function gridRowElement() {
+  return createElement({ tagName: 'tr', props: { className: 'listRowNormal' } })
+}

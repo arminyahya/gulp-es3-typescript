@@ -123,6 +123,51 @@ export function dialogFormToJSON() {
   return form
 }
 
+export function isEmpty(value) {
+  if (typeof value === 'object') {
+    return value.length === 0
+  } else {
+    return !!!value
+  }
+}
+
+/**
+ * for example 
+ 	validate({
+				rules: { cemail: { isRequired: true, pattern: /[a-z]+@[a-z]+\.[a-z]+/ } },
+				messages: {
+					cemail: {
+						isRequired: 'please fill field',
+						pattern: 'email is incorect'
+					}
+				}
+			}, formToJSON('#commentForm'))
+ */
+export function validate(validatorModel, values) {
+  const { rules, messages } = validatorModel
+  // check required
+  const requiredFields = Object.keys(rules).filter((rule) => rules[rule].isRequired)
+  requiredFields.forEach((field) => {
+    if (isEmpty(values[field])) {
+      const fieldDom = document.getElementById(field)
+      const error = document.createElement('span')
+      error.innerHTML = messages[field].isRequired
+      fieldDom.after(error)
+    }
+  })
+
+  // check pattern
+  const withPatternsFields = Object.keys(rules).filter((rule) => rules[rule].pattern)
+  withPatternsFields.forEach((field) => {
+    if (!isEmpty(values[field]) && rules[field].pattern.test(values[field])) {
+      const fieldDom = document.getElementById(field)
+      const error = document.createElement('span')
+      error.innerHTML = messages[field].pattern
+      fieldDom.after(error)
+    }
+  })
+}
+
 export function importModule(url: string) {
   // const refinedUrl = appendPackageId(url)
   const refinedUrl = url
