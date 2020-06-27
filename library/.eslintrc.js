@@ -20,5 +20,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/prefer-namespace-keyword': 'off',
+    '@typescript-eslint/no-empty-interface': 'off',
+    'prefer-const': 'off',
   },
 }

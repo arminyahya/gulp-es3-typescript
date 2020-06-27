@@ -1,5 +1,5 @@
 import * as $ from 'jquery'
-import DynamicDataGrid from './Components/dynamicData/Edit/gride'
+import DynamicDataGrid from './Components/dynamicData/Edit/bundle'
 export {
   createElement,
   renderIntoRoot,

@@ -1,7 +1,7 @@
-import { TableCellType } from './Edit/gride'
+import { TableCellType } from './Edit/bundle'
 import SimpleModal, { removeElement } from '../simple-modal'
 import { elementIdGenerator, createElement, dialogFormToJSON, formToJSON } from '../../utils'
-import DynamicDataGrid from './Edit/gride'
+import DynamicDataGrid from './Edit/bundle'
 
 interface Props {
   mode: 'add' | 'edit'
