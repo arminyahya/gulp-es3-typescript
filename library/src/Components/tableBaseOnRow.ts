@@ -1,5 +1,5 @@
 import { isObjectDomElement, createElement, withErrorHandling } from '../utils'
-import { TableCellType, toTD } from './dynamicData/Edit/bundle'
+import { TableCellType, toTD } from '../extraModel/Components/bundle'
 type TableRow = {
   renderer: HTMLElement[]
 }

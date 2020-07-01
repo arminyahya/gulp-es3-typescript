@@ -1,5 +1,4 @@
-import * as $ from 'jquery'
-import DynamicDataGrid from './Components/dynamicData/Edit/bundle'
+import DynamicDataGrid from './extraModel/Components/bundle'
 export {
   createElement,
   renderIntoRoot,
@@ -8,7 +7,11 @@ export {
   dialogFormToJSON,
   currentDocumentObj,
 } from './utils'
-import { withLabel } from './Components'
+export { withLabel, autoComplete } from './Components'
 import { mapIntoTD } from './Components/tableBaseOnRow'
-export { createApiUrl } from './ajax'
-export { withLabel, mapIntoTD, DynamicDataGrid }
+export { default as DidgahDeferred } from './DidgahDeferred'
+export { createApiUrl, createAjaxReq } from './ajax'
+export { mapIntoTD, DynamicDataGrid }
+export * from './enums'
+
+export { default as ExtraModel } from './extraModel/extraModel'

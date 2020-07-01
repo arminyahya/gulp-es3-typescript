@@ -1,0 +1,13 @@
+{
+
+	"TSC": {
+    "prefix": ["component"],
+    "body": [
+				"interface Props {}",
+				"export default function Example({}: Props) {",
+		 		"return createElement({ tagName: '' })",
+	 	"}",
+		],
+    "description": "typescript component."
+  }
+}

@@ -1,6 +1,6 @@
 import * as $ from 'jquery'
 
-export const createAjaxReq = (url = '', method = '', data = {}, options = {}, isSentDataJson = true) => {
+export const createAjaxReq = (method = 'POST', url = '', data = {}, options = {}, isSentDataJson = true) => {
   const req = $.ajax({
     dataType: 'json',
     contentType: 'application/json',

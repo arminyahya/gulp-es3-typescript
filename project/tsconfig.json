@@ -14,7 +14,7 @@
     ],
     "baseUrl": ".",
       "paths": {
-      "gulp-es3-typescript-library": ["node_modules/gulp-es3-typescript-library"],
+      "gulp-es3-typescript-library": ["node_modules/gulp-es3-typescript-library/dist/library"],
   }
 },
 "include": [

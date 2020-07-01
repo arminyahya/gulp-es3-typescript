@@ -1,4 +1,4 @@
-import * as lib from "gulp-es3-typescript-library";
+import lib from "gulp-es3-typescript-library";
 
 const AnotherGrid = {
 		headers: ["field0"],
@@ -31,5 +31,4 @@ const AnotherGrid = {
 			fields: [{ name: "field0", col: 1, Type: { IsBundle: false } }],
 		},
 	};
-
-export default AnotherGrid;
+	export default AnotherGrid;

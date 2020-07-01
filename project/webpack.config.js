@@ -19,15 +19,16 @@ module.exports = {
 				use: {
 					loader: "babel-loader",
 					options: {
-            presets: [
-              ['@babel/preset-env',
-              // {
-              //   targets: {
-              //     ie: '5',
-              //   },
-							// }
-						]
-            ],
+						presets: [
+							[
+								"@babel/preset-env",
+								// {
+								//   targets: {
+								//     ie: '5',
+								//   },
+								// }
+							],
+						],
 						plugins: ["babel-plugin-transform-class-properties"],
 					},
 				},
@@ -38,27 +39,27 @@ module.exports = {
 		new ES3Plugin(),
 		new MinifyPlugin({
 			// booleans: false,
-      // builtIns: false,
-      // consecutiveAdds: false,
+			// builtIns: false,
+			// consecutiveAdds: false,
 			// deadcode: false,
 			// evaluate: false,
-      // flipComparisons: false,
-      // guards: false,
-      // infinity: false,
+			// flipComparisons: false,
+			// guards: false,
+			// infinity: false,
 			mangle: false,
-      // memberExpressions: false,
-      // mergeVars: false,
-      // numericLiterals: false,
-      // propertyLiterals: false,
-      // regexpConstructors: false,
-      // removeConsole: true,
-      // removeDebugger: true,
-      // removeUndefined: false,
-      // replace: false,
+			// memberExpressions: false,
+			// mergeVars: false,
+			// numericLiterals: false,
+			// propertyLiterals: false,
+			// regexpConstructors: false,
+			// removeConsole: true,
+			// removeDebugger: true,
+			// removeUndefined: false,
+			// replace: false,
 			// simplify: false,
-      // simplifyComparisons: false,
-      // typeConstructors: false,
-      // undefinedToVoid: false
+			// simplifyComparisons: false,
+			// typeConstructors: false,
+			// undefinedToVoid: false
 		}),
 	],
 
@@ -71,4 +72,3 @@ module.exports = {
 		path: path.resolve(__dirname, "dist"),
 	},
 };
-

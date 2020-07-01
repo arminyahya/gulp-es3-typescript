@@ -13,7 +13,7 @@
     "lib": ["es2016", "DOM"],
   },
   "include": [
-    "src", "../project/src/example-data.ts"
+    "./src"
   ],
   "exclude": [
     "node_modules",

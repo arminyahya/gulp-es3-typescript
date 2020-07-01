@@ -40,3 +40,13 @@ export enum CompareOptions {
   DateTimeGreaterOrEqual = 13,
   DateTimeLessOrEqual = 14,
 }
+
+export enum ControlType {
+  Container = 1,
+  Component = 2,
+}
+
+export enum ContainerCode {
+  Fieldset = 1,
+  FormRow = 2,
+}

@@ -3,7 +3,6 @@ export default class DidgahDeferred<T = any> {
   private rejecter: (value?: unknown) => void
 
   private promiseInstance: Promise<T>
-
   constructor() {
     this.promiseInstance = new Promise<T>((executor, reject) => {
       this.resolver = executor
@@ -17,7 +16,6 @@ export default class DidgahDeferred<T = any> {
     this.resolve = this.resolve.bind(this)
     this.reject = this.reject.bind(this)
   }
-
   static create<T>(): DidgahDeferred<T> {
     return new DidgahDeferred<T>()
   }
