@@ -1,74 +1,81 @@
-import Textbox from './Textbox/textbox';
-import Textarea from './Textarea/textarea';
-import AutoComplete from './AutoComplete/autoComplete'
-import Email from './Email/email';
-import Url from './Url/url';
-import Checkbox from './Checkbox/checkbox';
-import InputNumber from './InputNumber/inputNumber';
-import Guid from './Guid/guid';
-import InputDecimal from './InputDecimal/InputDecimal';
+import Textbox from "./Textbox/textbox";
+import Textarea from "./Textarea/textarea";
+import AutoComplete from "./AutoComplete/autoComplete";
+import Email from "./Email/email";
+import Url from "./Url/url";
+import Checkbox from "./Checkbox/checkbox";
+import InputNumber from "./InputNumber/inputNumber";
+import Guid from "./Guid/guid";
+import InputDecimal from "./InputDecimal/InputDecimal";
 import IWidget = DynamicDataModel.Layout.IWidget;
-import { DidgahDeferred } from 'gulp-es3-typescript-library';
-import AutoCompleteSettingForm from './AutoComplete/autoCompleteSettingForm';
-import TextboxSettingForm from './Textbox/textboxSettingForm';
-import GeneralSetting from './generalSetting';
-import EmptyBlock from './EmptyBlock/emptyBlock';
+import { DidgahDeferred, createElement } from "gulp-es3-typescript-library";
+import AutoCompleteSettingForm from "./AutoComplete/autoCompleteSettingForm";
+import TextboxSettingForm from "./Textbox/textboxSettingForm";
+import GeneralSetting from "./generalSetting";
+import EmptyBlock from "./EmptyBlock/emptyBlock";
 
 const WIDGETS: { [name: string]: IWidget } = {
-	'TextBox': {
+	TextBox: {
 		component: Textbox.component,
 		setting: TextboxSettingForm,
-		events: Textbox.events
+		events: Textbox.events,
 	},
-	'TextArea': {
+	TextArea: {
 		component: Textarea.component,
 		setting: TextboxSettingForm,
-		events: Textarea.events
-	}
-	,
-	'AutoComplete': {
+		events: Textarea.events,
+	},
+	AutoComplete: {
 		component: AutoComplete.component,
 		setting: AutoCompleteSettingForm,
-		events: AutoComplete.events
+		events: AutoComplete.events,
 	},
-	'Email': {
+	Email: {
 		component: Email.component,
 		setting: GeneralSetting,
 		events: Email.events,
-		getConsistentRules: Email.getConsistentRules
+		getConsistentRules: Email.getConsistentRules,
 	},
-	'Url': {
+	Url: {
 		component: Url.component,
 		setting: GeneralSetting,
 		events: Url.events,
-		getConsistentRules: Url.getConsistentRules
+		getConsistentRules: Url.getConsistentRules,
 	},
-	'Checkbox': {
+	Checkbox: {
 		component: Checkbox.component,
 		setting: GeneralSetting,
 		events: Checkbox.events,
 	},
-	'InputNumber': {
+	InputNumber: {
 		component: InputNumber.component,
-		setting: () => '',
+		setting: () => "",
 		events: InputNumber.events,
 	},
-	'Guid': {
+	Guid: {
 		component: Guid.component,
-		setting: () => '',
+		setting: () => "",
 		events: Guid.events,
-		getConsistentRules: Guid.getConsistentRules
+		getConsistentRules: Guid.getConsistentRules,
 	},
-	'InputDecimal': {
+	InputDecimal: {
 		component: InputDecimal.component,
-		setting: () => '',
+		setting: () => "",
 		events: InputDecimal.events,
-		getConsistentRules: InputDecimal.getConsistentRules
+		getConsistentRules: InputDecimal.getConsistentRules,
 	},
-	'EmptyBlock': {
+	EmptyBlock: {
 		component: EmptyBlock.component,
 	},
-}
+	TableExEditor: {
+		component: ({}) =>
+			createElement({
+				tagName: "div",
+				props: { className: "TableExEditor" },
+				innerText: `i'm TableExEditor`,
+			}),
+	},
+};
 
 const defaultWidget = {
 	events: {
@@ -76,9 +83,11 @@ const defaultWidget = {
 			const dfd = DidgahDeferred.create();
 			dfd.resolve();
 			return dfd.promise();
-		}
+		},
 	},
-	getConsistentRules: () => []
-}
+	getConsistentRules: () => [],
+};
 
-export default (id: string) => { return WIDGETS[id] && { ...defaultWidget, ...WIDGETS[id] } };
+export default (id: string) => {
+	return WIDGETS[id] && { ...defaultWidget, ...WIDGETS[id] };
+};

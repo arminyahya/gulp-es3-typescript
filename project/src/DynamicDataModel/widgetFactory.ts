@@ -107,10 +107,8 @@ export default function WidgetFactory(
 		softwareGuid: System.Guid
 	): IDynamicDataModelUIManager {
 		if (softwareGuid === softwareGuid || softwareGuid === undefined) {
-			console.log("getCorrespondingWidgeManager - 1");
 			return commonWidgetManager({});
 		}
-		console.log("getCorrespondingWidgeManager - 2");
 
 		// return softwareWidgetManager({});
 	}
