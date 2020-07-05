@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<script language="javascript">
+  var g_LanguageCode = 'fa'
+  var g_Direction = 'rtl'
+  var g_PersianKeyboardBehavior = 'persian'
+  var g_requiredFieldErrorBackgroundColor = 'pink'
+  var g_winDocAll = window.document.all
+  var g_winDocBody = window.document.body
+  var languageCode = 'fa'
+  var softwareGuid = 'b90f03a0-5b3b-4027-b9ec-247c2d6ddaac'
+</script>
+<html xmlns:WM xmlns:ccc>
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=5" />
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+  <!-- <script
+      src="https://code.jquery.com/jquery-1.12.4.min.js"
+      integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+      crossorigin="anonymous"
+    ></script> -->
+  <script language="javascript" src="./datepicker/routines.js"></script>
+  <script language="javascript" src="./datepicker/persianDateRoutines.js"></script>
+  <script language="javascript" src="./datepicker/amcharts/amcharts.js"></script>
+  <script language="javascript" src="./datepicker/styles.js"></script>
+  <?IMPORT namespace="ccc" implementation="./datepicker/datePicker.htc">
+  <link rel="stylesheet" href="./styles/index.css" />
+	<link rel="stylesheet" href="./styles/didgah-4-styles.css" />
+
+  </head>
+
+<body>
+  <div id="Container"></div>
+	<div id="root">
+	</div>
+</body>
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.14/es5-shim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.14/es5-sham.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/json3/3.3.2/json3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.5/es6-shim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.5/es6-sham.min.js"></script>
+
+<script>
+  if (!document.querySelectorAll) {
+    document.querySelectorAll = function (selectors) {
+      var style = document.createElement('style'), elements = [], element;
+      document.documentElement.firstChild.appendChild(style);
+      document._qsa = [];
+
+      style.styleSheet.cssText = selectors + '{x-qsa:expression(document._qsa && document._qsa.push(this))}';
+      window.scrollBy(0, 0);
+      style.parentNode.removeChild(style);
+
+      while (document._qsa.length) {
+        element = document._qsa.shift();
+        element.style.removeAttribute('x-qsa');
+        elements.push(element);
+      }
+      document._qsa = null;
+      return elements;
+    };
+  }
+
+  if (!document.querySelector) {
+    document.querySelector = function (selectors) {
+      var elements = document.querySelectorAll(selectors);
+      return (elements.length) ? elements[0] : null;
+    };
+  }
+</script>
+</html>

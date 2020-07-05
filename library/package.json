@@ -4,9 +4,9 @@
   "description": "npm i",
   "main": "dist/index.js",
   "scripts": {
-    "start": "gulp --gulpfile tasks",
-    "build:dev": "webpack --config ./webpack.config.js",
-    "build:production": "webpack --config ./webpack.config.js",
+    "start:ie5": "gulp --gulpfile tasks",
+    "start:chrome": "./node_modules/.bin/webpack-dev-server --config ./webpack.chrome.config",
+    "build:production": "webpack --config ./webpack.ie5.config.js",
     "build:project": "npm run build:production --prefix ../project"
   },
   "keywords": [],
@@ -25,18 +25,22 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
     "browser-sync": "^1.9.1",
+    "copy-webpack-plugin": "^6.0.3",
     "css-loader": "^0.28.9",
     "extract-text-webpack-plugin": "^3.0.2",
     "gulp": "^4.0.2",
     "gulp-debounce": "^1.0.2",
     "gulp-livereload": "^4.0.2",
+    "html-loader": "^1.1.0",
+    "html-webpack-plugin": "^4.3.0",
     "jquery": "^1.12.4",
     "npm": "^6.14.5",
     "ts-loader": "^7.0.2",
     "typescript": "^3.8.3",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
-    "webpack-es3-plugin": "^1.5.1"
+    "webpack-es3-plugin": "^1.5.1",
+    "write-file-webpack-plugin": "^4.5.1"
   },
   "dependencies": {
     "@types/jquery": "^3.3.38",
@@ -47,6 +51,8 @@
     "eslint": "^7.1.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.3",
-    "prettier": "^2.0.5"
+    "prettier": "^2.0.5",
+    "style-loader": "^1.2.1",
+    "webpack-dev-server": "^3.11.0"
   }
 }
