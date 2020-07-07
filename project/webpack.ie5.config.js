@@ -15,7 +15,8 @@ module.exports = {
 			},
 			{
 				test: /\.m?js$/,
-				exclude: [/(node_modules|bower_components)/],
+				include: [path.resolve(__dirname, "dist")],
+				// exclude: [/(node_modules|bower_components|datepicker)/],
 				use: {
 					loader: "babel-loader",
 					options: {

@@ -8,11 +8,17 @@ import InputNumber from "./InputNumber/inputNumber";
 import Guid from "./Guid/guid";
 import InputDecimal from "./InputDecimal/InputDecimal";
 import IWidget = DynamicDataModel.Layout.IWidget;
-import { DidgahDeferred, createElement } from "gulp-es3-typescript-library";
+import {
+	DidgahDeferred,
+	createElement,
+	DynamicDataGrid,
+} from "gulp-es3-typescript-library";
 import AutoCompleteSettingForm from "./AutoComplete/autoCompleteSettingForm";
 import TextboxSettingForm from "./Textbox/textboxSettingForm";
 import GeneralSetting from "./generalSetting";
 import EmptyBlock from "./EmptyBlock/emptyBlock";
+import editorFields from "../tableExDisplayFields";
+import displayFields from "../tableExEditorFields";
 
 const WIDGETS: { [name: string]: IWidget } = {
 	TextBox: {
@@ -68,12 +74,29 @@ const WIDGETS: { [name: string]: IWidget } = {
 		component: EmptyBlock.component,
 	},
 	TableExEditor: {
-		component: ({}) =>
-			createElement({
-				tagName: "div",
-				props: { className: "TableExEditor" },
-				innerText: `i'm TableExEditor`,
-			}),
+		component: (props) => {
+			console.log("props is");
+			console.log(props);
+			const { fieldInstance, fields } = props;
+
+			// { input: editorFields[d.EditWidgets[0].Id] }
+			// @ts-ignore
+			const comp = DynamicDataGrid({
+				headers: fields.map((filed) => filed.Name),
+				initialFormData: [],
+				displayCellRenderer: (widgetId) => {
+					return { input: displayFields[widgetId] };
+				},
+				editCellRenderer: ({ widgetId }) => {
+					return { input: editorFields[widgetId] };
+				},
+				rowsData: {
+					fields: fields,
+				},
+			});
+			console.log(comp);
+			return comp;
+		},
 	},
 };
 

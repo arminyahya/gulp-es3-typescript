@@ -41,8 +41,13 @@ export const getElementWithClassNames = (element: HTMLElement, classNames: strin
 export const elementIdGenerator = {
   busyIds: [],
   gererate: function () {
-    const id = Math.random().toString(36).substr(2, 9)
-    if (document.querySelectorAll(`#${id}`).length === 0 && !this.busyIds.find((item) => item === id)) {
+    let id = ''
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+    const charactersLength = characters.length
+    for (let i = 0; i < 5; i++) {
+      id += characters.charAt(Math.floor(Math.random() * charactersLength))
+    }
+    if (document.querySelectorAll(`#${id}`)!.length === 0 && !this.busyIds.find((item) => item === id)) {
       this.busyIds.push(id)
       return id.toString()
     } else {
@@ -93,7 +98,8 @@ export const withErrorHandling = <T extends (...args: any[]) => any>(component: 
   try {
     return component(...args)
   } catch (e) {
-    alert('error happend in ' + componentName + ' ' + e.message || e)
+    throw Error(e)
+    // console.log('error happend in ' + componentName + ' ' + e.message || e)
   }
 }
 

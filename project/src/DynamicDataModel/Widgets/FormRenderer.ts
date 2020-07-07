@@ -260,7 +260,9 @@ function FormRenderer({
 
 	function componentDidMount() {
 		widgetFactory.importModules().done(() => {
+			console.log(1);
 			prepareFormDescriptor().done((result: any) => {
+				console.log(2);
 				// console.log(result);
 				const root = document.getElementById("root");
 
@@ -270,7 +272,7 @@ function FormRenderer({
 					form: {},
 					controlFactory: controlFactroy,
 				}).forEach(function (cm) {
-					console.log("forEach");
+					console.log(cm);
 					root.appendChild(cm);
 					// formDescriptor = result;
 				});

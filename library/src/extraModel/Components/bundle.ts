@@ -53,6 +53,7 @@ const DynamicDataGrid = ({
   const tableBodyId = elementIdGenerator.gererate()
   const formData = [...initialFormData]
   const displayRows: TableRow[] = getDisplayRows()
+  console.log(displayRows)
   function getDisplayRows() {
     return [
       ...formData.map((row, i) => ({
@@ -70,6 +71,7 @@ const DynamicDataGrid = ({
           ...displayCellRenderer({
             ...fieldData,
             formData: formData[index][fieldData.name],
+            widgetId: fieldData.DisplayWidgets[0].Id,
           }),
         }))
       ),
@@ -89,8 +91,8 @@ const DynamicDataGrid = ({
       for (const item in data) {
         const mainTd = toTD(
           displayCellRenderer({
-            ...rowsData.fields.find(function (field) {
-              return field.name === item
+            ...rowsData.fields.find(function (field, fieldI) {
+              return field.Name === item
             }),
             formData: data[item],
           })
@@ -106,6 +108,7 @@ const DynamicDataGrid = ({
       mode: 'add',
       fields: rowsData.fields,
       formData: {},
+      widgetId: '',
       editCellRenderer,
       onSubmit,
     })
@@ -126,9 +129,9 @@ const DynamicDataGrid = ({
       mode: 'edit',
       fields: rowsData.fields,
       formData: formData[index],
+      widgetId: '',
       editCellRenderer,
       onSubmit: (d) => {
-        console.log(d)
         changeRowData(index, d)
       },
     })
@@ -152,6 +155,7 @@ const DynamicDataGrid = ({
   }
 
   function firstRender() {
+    console.log(15)
     /* table core elements */
     const tableDom = createElement<HTMLTableElement>({
       tagName: 'table',
@@ -162,23 +166,30 @@ const DynamicDataGrid = ({
     const tableBody = createElement({ tagName: 'tbody', props: { id: tableBodyId } })
     tableheadrow.appendChild(createElement({ tagName: 'th', props: { className: 'tableFloatingHeader' } }))
     headers.forEach((header, index) => {
+      console.log(16)
+
       let rowSpan = 1
       let colSpan = 1
       try {
         rowSpan = 1
-        colSpan = rowsData.fields[index].col
+        // colSpan = rowsData.fields[index].col
       } catch {}
       const th = createElement({ tagName: 'th', props: { className: 'tableFloatingHeader', rowSpan, colSpan } })
       th.innerHTML = header
       tableheadrow.appendChild(th)
     })
     tableheadrow.appendChild(createElement({ tagName: 'th', props: { className: 'tableFloatingHeader' } }))
+    console.log(displayRows)
+
     /* add table data */
     for (const row of displayRows) {
+      console.log(18)
+
       const tr = gridRowElement()
       for (const td of row.renderer) {
         tr.appendChild(td)
       }
+      console.log(tr)
       tableBody.appendChild(tr)
     }
     tableHead.appendChild(tableheadrow)
@@ -190,25 +201,19 @@ const DynamicDataGrid = ({
   return firstRender()
 }
 
-function onInit(url: string, attributes: InitAjaxAttributes) {
-  const { EntityId, ReferenceFieldId } = attributes
-  const dfd = DidgahDeferred.create<any>()
-  createAjaxReq(url, 'post', {
-    EntityId: EntityId,
-    ReferenceFieldId: ReferenceFieldId,
-  }).done((result: Array<{ key; value }>) => {
-    const dataSource = result.map((item) => {
-      return { value: item.key, label: item.value || '' }
-    })
-    dfd.resolve(dataSource)
-  })
-  return dfd.promise()
-}
+// function onInit(url: string, attributes: InitAjaxAttributes) {
+//   const { EntityId, ReferenceFieldId } = attributes
+//   const dfd = DidgahDeferred.create<any>()
+//   createAjaxReq(url, 'post', {
+//     EntityId: EntityId,
+//     ReferenceFieldId: ReferenceFieldId,
+//   }).done((result: Array<{ key; value }>) => {
+//     const dataSource = result.map((item) => {
+//       return { value: item.key, label: item.value || '' }
+//     })
+//     dfd.resolve(dataSource)
+//   })
+//   return dfd.promise()
+// }
 
-export default withErrorHandling<({ ...args }: Props) => void>(
-  {
-    component: DynamicDataGrid,
-    onInit: onInit,
-  },
-  'DynamicData/Grid'
-)
+export default withErrorHandling<({ ...args }: Props) => void>(DynamicDataGrid, 'DynamicData/Grid')

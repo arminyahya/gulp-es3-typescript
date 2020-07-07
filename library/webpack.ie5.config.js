@@ -15,7 +15,7 @@ module.exports = {
       },
       {
         test: /\.m?js$/,
-        exclude: [/(node_modules|bower_components)/],
+        include: [path.resolve(__dirname, 'dist')],
         use: {
           loader: 'babel-loader',
           options: {

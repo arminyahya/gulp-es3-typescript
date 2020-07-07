@@ -27,81 +27,83 @@ export function getComponent(
   controlFactory: (component: ExtraModel.Component) => HTMLElement
 ) {
   let extraModelComponent = null
-  console.log(component)
+  const defaultProps = { ...component.Attributes }
+  console.log(component.Code)
   switch (component.Code) {
     case ControlsCode.IntCode.toString():
-      extraModelComponent = intType
+      extraModelComponent = intType(defaultProps)
       break
     case ControlsCode.BigDecimalCode.toString():
-      extraModelComponent = bigDecimalType
+      extraModelComponent = bigDecimalType(defaultProps)
       break
     case ControlsCode.DecimalCode.toString():
-      extraModelComponent = decimalType
+      extraModelComponent = decimalType(defaultProps)
       break
     case ControlsCode.TextCode.toString():
-      extraModelComponent = textType
+      extraModelComponent = textType(defaultProps)
       break
     case ControlsCode.EmailCode.toString():
-      extraModelComponent = emailType
+      extraModelComponent = emailType(defaultProps)
       break
     case ControlsCode.BooleanCode.toString():
-      extraModelComponent = booleanType
+      extraModelComponent = booleanType(defaultProps)
       break
     case ControlsCode.DateCode.toString():
-      extraModelComponent = dateType
+      extraModelComponent = dateType(defaultProps)
       break
     case ControlsCode.DateTimeCode.toString():
-      extraModelComponent = dateTimeType
+      extraModelComponent = dateTimeType(defaultProps)
       break
     case ControlsCode.MultiSelectCode.toString():
       // extraModelComponent = <MultiSelectType multiSelectDataSource={ component.Attributes } />;
-      extraModelComponent = multiSelectType
+      extraModelComponent = multiSelectType(defaultProps)
 
       break
     case ControlsCode.UniqueidentifierCode.toString():
-      extraModelComponent = uniqueidentifierType
+      extraModelComponent = uniqueidentifierType(defaultProps)
       break
     case ControlsCode.AutoIncrementCode.toString():
-      extraModelComponent = autoIncrementType
+      extraModelComponent = autoIncrementType(defaultProps)
       break
     case ControlsCode.GenderCode.toString():
-      extraModelComponent = genderType
+      extraModelComponent = genderType(defaultProps)
       break
     case ControlsCode.ImageCode.toString():
-      extraModelComponent = imageType
+      extraModelComponent = imageType(defaultProps)
       break
     case ControlsCode.FileCode.toString():
-      extraModelComponent = fileType
+      extraModelComponent = fileType(defaultProps)
       break
     case ControlsCode.StringCode.toString():
-      extraModelComponent = stringType
+      extraModelComponent = stringType(defaultProps)
       break
     case ControlsCode.TelCode.toString():
-      extraModelComponent = tellType
+      extraModelComponent = tellType(defaultProps)
       break
     case ControlsCode.TimeCode.toString():
-      extraModelComponent = timeType
+      extraModelComponent = timeType(defaultProps)
       break
     case ControlsCode.UrlCode.toString():
-      extraModelComponent = urlType
+      extraModelComponent = urlType(defaultProps)
       break
     case ControlsCode.GridCode.toString():
       // extraModelComponent = <GridType {...component.Attributes } />;
       extraModelComponent = ({}) => createElement({ tagName: 'span', innerText: 'GridType' })
       break
     case ControlsCode.InsertTimeStampCode.toString():
-      extraModelComponent = insertTimeStamp
+      extraModelComponent = insertTimeStamp(defaultProps)
       break
     case ControlsCode.DidgahStaffCode.toString():
-      extraModelComponent = didgahStaffType
+      extraModelComponent = didgahStaffType(defaultProps)
       break
     case ControlsCode.DidgahContactCode.toString():
-      extraModelComponent = didgahContactType
+      extraModelComponent = didgahContactType(defaultProps)
       break
     default:
-      extraModelComponent = controlFactory(component)
-      // extraModelComponent = didgahContactType
+      // @ts-ignore
+      extraModelComponent = controlFactory(component)(component.Attributes)
+      // extraModelComponent = ({}) => createElement({ tagName: 'span', innerText: 'GridType' })
       break
   }
-  return extraModelComponent({})
+  return extraModelComponent
 }

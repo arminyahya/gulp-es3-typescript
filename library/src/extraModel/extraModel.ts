@@ -74,7 +74,6 @@ export default function ExtraModel({
     ;(component.Rules || []).forEach((map) => {
       if (!!map['pattern']) map['pattern'] = new RegExp(map['pattern'])
     })
-
     return extraModelComponent
     // 	return <FormItem label={component.Label} key={component.DataIndex}>
     // 		{form.getFieldDecorator(component.DataIndex, { rules: !this.editMode ? [] : getDesiredValidationRules(component.Code, component.Required, component.Rules) })(React.cloneElement(extraModelComponent, otherProps))}
@@ -95,7 +94,10 @@ export default function ExtraModel({
     } else if (container.Code === ContainerCode.FormRow.toString()) {
       const formRow = createElement({ tagName: 'div' })
       container.Children.forEach(function (child) {
-        formRow.appendChild(renderControl(child))
+        console.log(renderControl(child))
+        if (renderControl(child)) {
+          formRow.appendChild(renderControl(child))
+        }
       })
       return formRow
       // return <FormRow key={container.Identifier}>

@@ -6,11 +6,12 @@ interface Props {
   mode: 'add' | 'edit'
   fields: any[]
   formData: any
+  widgetId: string
   editCellRenderer: (d) => TableCellType
   onSubmit: (d) => void
 }
 
-export default function DynamicDataModal({ mode, fields, formData = {}, editCellRenderer, onSubmit }: Props) {
+export default function DynamicDataModal({ mode, fields, formData = {}, widgetId, editCellRenderer, onSubmit }: Props) {
   const { modal, onClose } = SimpleModal()
   const formId = elementIdGenerator.gererate()
   const form = createElement({ tagName: 'form', props: { id: formId } })
@@ -31,7 +32,9 @@ export default function DynamicDataModal({ mode, fields, formData = {}, editCell
         })
       )
     } else {
-      wrap.appendChild(editCellRenderer(field).input)
+      field.widgetId = widgetId
+      // @ts-ignore
+      wrap.appendChild(editCellRenderer(field).input())
     }
     form.appendChild(wrap)
   })
